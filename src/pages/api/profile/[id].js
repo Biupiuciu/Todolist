@@ -4,11 +4,12 @@ dotenv.config();
 const accessTokenKey=process.env.ACCESS_TOKEN_PRIVATE_KEY;
 // const {getLogInTasks,updateTasks}=require('/database');
 import { getLogInTasks,updateTasks } from '../../../../database';
+import jwt from 'jsonwebtoken';
 
 export const profileMiddleware = (req, res, next) => {
   const authHeader=req.headers;
   const accessToken=authHeader.authorization.split(' ')[1];
-  const jwt=require("jsonwebtoken");
+  
  jwt.verify(accessToken,accessTokenKey,(err,decoded)=>{
  
   
