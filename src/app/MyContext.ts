@@ -1,3 +1,4 @@
+import { list } from 'postcss';
 import { createContext } from 'react';
 
 
@@ -14,28 +15,28 @@ export type ToDoList=Tasks[];
 export type ListType = "todo" | "inpro" | "done";
 export const MyContext = createContext({
     userId:0,
-    setUserId:(int:number) => {},
+    setUserId:(int:number) => {int},
     taskNum:0,
-    setTaskNum:(int:any) => {},
+    setTaskNum:(int:number) => {int},
     lists: [
         { title: '', tasks: [{content:'',id:''}] },
         { title: '', tasks: [{content:'',id:''}] },
         { title: '', tasks: [{content:'',id:''}] }
         ],
-    setLists: (object:any) =>{},
+    setLists: (object:any) =>{object},
     firstTimeFocused:false,
-    setFirstTimeFocused:(object:boolean) => {},
+    setFirstTimeFocused:(object:boolean) => {object},
     menuPosition:{x:0,y:0},
-    setMenuPosition:(object:any)=>{},
+    setMenuPosition:(object:any)=>{object},
    
     //first digit:-1 -- unvisible >-1 -- show which task's menu
     //second digit:which list
     showMenu:[-1,-1],
-    setShowMenu:(int:number[])=>{},
+    setShowMenu:(int:number[])=>{int},
     isEditting: false,
-    setIsEditting: (boolean:boolean) => {},
+    setIsEditting: (boolean:boolean) => {boolean},
     editId: '',
-    setEditId: (string:string) => {},
+    setEditId: (string:string) => {string},
     
 
 });

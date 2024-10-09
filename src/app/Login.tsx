@@ -6,8 +6,8 @@ import axios from "axios";
 import { MyContext } from "./MyContext";
 import taskImg from "../asset/Task management system for productivity.png";
 export const Login = () => {
-  const [userName, useUserName] = useState("");
-  const [psd, usePsd] = useState("");
+  const [userName, setUserName] = useState("");
+  const [psd, setPsd] = useState("");
   const [isForLogin, setIsForLogin] = useState(true);
   const { setUserId } = useContext(MyContext);
 
@@ -29,6 +29,12 @@ export const Login = () => {
       console.log(err);
     }
   };
+  const handleUsernameChanged = (e: any) => {
+    setUserName(e.currentTarget.value);
+  };
+  const handlePwdChanged = (e: any) => {
+    setPsd(e.currentTarget.value);
+  };
   return (
     <div className="background">
       <div className="login">
@@ -45,9 +51,7 @@ export const Login = () => {
                 placeholder="Username"
                 type="text"
                 value={userName}
-                onChange={(e) => {
-                  useUserName(e.currentTarget.value);
-                }}
+                onChange={handleUsernameChanged}
               />
             </div>
             <div>
@@ -55,9 +59,7 @@ export const Login = () => {
                 placeholder="Password"
                 type="password"
                 value={psd}
-                onChange={(e) => {
-                  usePsd(e.currentTarget.value);
-                }}
+                onChange={handlePwdChanged}
               />
             </div>
             <div className="LoginOrSignup">

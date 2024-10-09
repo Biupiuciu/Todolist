@@ -1,7 +1,8 @@
 
-const {createUser}=require('/database');
-const {generateAccessToken,generateRefreshToken}=require('/server');
-
+// const {createUser}=require('/database');
+// const {generateAccessToken,generateRefreshToken}=require('/server');
+import { createUser } from '../../../database';
+import { generateAccessToken,generateRefreshToken } from '../../../server';
 const signup =async (req,res) => {
    
     

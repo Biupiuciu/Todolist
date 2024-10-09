@@ -1,8 +1,9 @@
 
-require('dotenv').config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 const accessTokenKey=process.env.ACCESS_TOKEN_PRIVATE_KEY;
-const {getLogInTasks,updateTasks}=require('/database');
-
+// const {getLogInTasks,updateTasks}=require('/database');
+import { getLogInTasks,updateTasks } from '../../../../database';
 
 export const profileMiddleware = (req, res, next) => {
   const authHeader=req.headers;

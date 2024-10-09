@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { Login } from "./Login";
 import axios from "axios";

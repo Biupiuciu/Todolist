@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import axios from "axios";
 import { GetAccessToken, VerifyAccessToken } from "./Todo";
@@ -16,7 +16,7 @@ import { Header } from "./Header";
 
 export type ListType = "todo" | "inpro" | "done";
 export const Tasks = () => {
-  let { userId, setTaskNum, setLists, lists } = useContext(MyContext);
+  const { userId, setTaskNum, setLists, lists } = useContext(MyContext);
   const listTypes = ["todo", "inpro", "done"];
   const accessToken = GetAccessToken();
   const sensors = useSensors(useSensor(PointerSensor));

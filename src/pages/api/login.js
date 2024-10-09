@@ -1,7 +1,9 @@
 
 import { setCookie } from 'cookies-next';
-const {getLoginInfo}=require('/database');
-const {generateAccessToken,generateRefreshToken}=require('/server');
+// const {getLoginInfo}=require('/database');
+import { getLoginInfo } from '../../../database';
+// const {generateAccessToken,generateRefreshToken}=require('/server');
+import { generateAccessToken,generateRefreshToken } from '../../../server';
 
 const login = async(req,res) => {
     const{username,psd}=req.body;

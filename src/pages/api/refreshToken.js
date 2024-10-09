@@ -1,7 +1,11 @@
-import React from 'react'
-const jwt=require("jsonwebtoken");
-const {generateAccessToken}=require('/server');
-require('dotenv').config();
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+import jwt from 'jsonwebtoken';
+// const jwt=require("jsonwebtoken");
+import { generateAccessToken } from '../../../server';
+// const {generateAccessToken}=require('/server');
+// require('dotenv').config();
 const refreshTokenKey=process.env.REFRESH_TOKEN_PRIVATE_KEY;
 
 const refreshToken =async (req,res) => {

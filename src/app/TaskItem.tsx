@@ -17,7 +17,7 @@ interface ItemContent {
 export const UpdateTasksDB = async (lists: any, userId: number) => {
   const accessToken = GetAccessToken();
   try {
-    const { data, status } = await axios.post(`/api/profile/${userId}`, lists, {
+    const { status } = await axios.post(`/api/profile/${userId}`, lists, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
@@ -33,10 +33,11 @@ export const UpdateTasksDB = async (lists: any, userId: number) => {
     const error = err as Error;
     if (axios.isAxiosError(error)) {
       const data = error.response?.data;
-
-      const refreshResult = await RefreshAccessToken();
-      if (refreshResult == userId) {
-        await UpdateTasksDB(lists, userId);
+      if (data == "Expired token") {
+        const refreshResult = await RefreshAccessToken();
+        if (refreshResult == userId) {
+          await UpdateTasksDB(lists, userId);
+        }
       }
     }
   }
@@ -46,7 +47,7 @@ export const TaskItem = (props: ItemContent) => {
   const pElementRef: LegacyRef<HTMLParagraphElement> | undefined = createRef();
   const {
     task: { content, id: taskId },
-    id,
+
     listId,
   } = props;
 

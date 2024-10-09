@@ -1,11 +1,11 @@
 import { MyContext } from "./MyContext";
-import React, { useRef, useContext, useEffect, useState } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { UpdateTasksDB } from "./TaskItem";
 import { ToDoList } from "./MyContext";
 export const Header = () => {
   const inputRef = useRef(document.getElementById(`0`));
-  let {
+  const {
     userId,
     setUserId,
     setTaskNum,
@@ -40,7 +40,7 @@ export const Header = () => {
       };
 
       UpdateTasksDB({ todoList: newList, addNewTask: true }, userId);
-      setTaskNum((pre: number) => pre + 1);
+      setTaskNum(taskNum + 1);
       setFirstTimeFocused(true);
       return newList;
     });
