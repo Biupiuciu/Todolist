@@ -17,25 +17,28 @@ interface ItemContent {
 export const UpdateTasksDB = async (lists: any, userId: number) => {
   const accessToken = GetAccessToken();
   try {
-    const { data, status } = await axios.post(`/profile/${userId}`, lists, {
+    const { data, status } = await axios.post(`/api/profile/${userId}`, lists, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     });
-    if (data == "Expired token") {
-      const refreshResult = await RefreshAccessToken();
-      if (refreshResult == userId) {
-        await UpdateTasksDB(lists, userId);
-      }
-    }
+
     if (status == 200) {
       console.log("Update Successfully!");
       return;
     }
     throw new Error("Failed");
   } catch (err) {
-    console.log(err);
+    const error = err as Error;
+    if (axios.isAxiosError(error)) {
+      const data = error.response?.data;
+
+      const refreshResult = await RefreshAccessToken();
+      if (refreshResult == userId) {
+        await UpdateTasksDB(lists, userId);
+      }
+    }
   }
 };
 
@@ -62,13 +65,11 @@ export const TaskItem = (props: ItemContent) => {
   } = useContext(MyContext);
 
   useEffect(() => {
-    if (pElementRef?.current && taskId == editId) {
-      if (isEditting) {
-        console.log("pELE:", pElementRef.current);
-        pElementRef?.current.focus();
-      }
+    if (pElementRef?.current && taskId == editId && isEditting) {
+      console.log("pELE:", pElementRef.current);
+      pElementRef?.current.focus();
     }
-  }, [isEditting]);
+  }, [editId, isEditting]);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: taskId });
@@ -91,15 +92,14 @@ export const TaskItem = (props: ItemContent) => {
     updatedLists[listId] = { ...listToUpdate, tasks: updatedTasks };
 
     setLists(updatedLists);
-    UpdateTasksDB({ todoList: updatedLists }, userId);
+    UpdateTasksDB({ todoList: updatedLists, addNewTask: false }, userId);
   };
 
   const MakeItEditable = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(taskId);
     e.preventDefault();
     setIsEditting(true);
     setEditId(taskId);
-    console.log(pElementRef.current);
-    pElementRef.current?.focus();
   };
 
   const FinishEditting = (event: any) => {
@@ -135,6 +135,7 @@ export const TaskItem = (props: ItemContent) => {
       id={taskId}
       style={taskStyle}
       ref={setNodeRef}
+      onDoubleClick={MakeItEditable}
       {...(isEditting || showMenu[0] > -1 ? {} : listeners)}
       onContextMenu={showingMenu}
     >
@@ -151,9 +152,10 @@ export const TaskItem = (props: ItemContent) => {
       )}
       <p
         ref={pElementRef}
-        contentEditable={taskId == editId}
-        onDoubleClick={MakeItEditable}
+        suppressContentEditableWarning={true}
+        contentEditable={taskId == editId && isEditting}
         onKeyDown={FinishEditting}
+        // onDoubleClick={MakeItEditable}
         onBlur={(e) => {
           const updatedtask = e.currentTarget.textContent;
           updateList(updatedtask);

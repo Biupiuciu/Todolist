@@ -12,7 +12,7 @@ export const Login = () => {
   const { setUserId } = useContext(MyContext);
 
   const handleLogin = async () => {
-    const path = isForLogin ? "/login" : "signup";
+    const path = isForLogin ? "/api/login" : "/api/signup";
     try {
       const response = await axios.post(path, {
         username: userName,

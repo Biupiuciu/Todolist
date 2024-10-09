@@ -23,7 +23,7 @@ export const Tasks = () => {
 
   const getTasks = async (id: number) => {
     try {
-      const { data } = await axios.get(`/profile/${id}`, {
+      const { data } = await axios.get(`/api/profile/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

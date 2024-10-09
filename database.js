@@ -32,9 +32,8 @@ const getLogInTasks=async(id)=>{
 }
 const updateTasks=async(id,{todoList,addNewTask})=>{
     const newTasks=JSON.stringify(todoList);
-
     try{
-        queryRequest=addNewTask?`UPDATE users SET taskNum=taskNum+1,tasks ='${newTasks} ' WHERE id = '${id}'`:`UPDATE users SET tasks ='${newTasks} ' WHERE id = '${id}'`;
+        const queryRequest=addNewTask?`UPDATE users SET taskNum=taskNum+1,tasks ='${newTasks} ' WHERE id = '${id}'`:`UPDATE users SET tasks ='${newTasks} ' WHERE id = '${id}'`;
         const [rows] = await pool.query(queryRequest);
         
             return rows.affectedRows;

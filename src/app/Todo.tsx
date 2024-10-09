@@ -18,22 +18,16 @@ export const GetAccessToken = () => {
   }
 };
 
-export const VerifyAccessToken = async (data: any) => {
+export const VerifyAccessToken = (data: any) => {
   if (data.id) {
     return data.id;
   }
-  if (data == "Expired token") {
-    return RefreshAccessToken();
-  }
-  if (data == "Invalid token") {
-    localStorage.removeItem("accessToken");
-    return 0;
-  }
+
   return 0;
 };
 export const RefreshAccessToken = async () => {
   try {
-    const response = await axios.post("/refreshToken", {});
+    const response = await axios.post("/api/refreshToken", {});
 
     if (response.status == 401) {
       localStorage.removeItem("accessToken");
@@ -68,17 +62,27 @@ export const Todo = () => {
     try {
       const accessToken = GetAccessToken();
 
-      const { data } = await axios.get("/profile", {
+      const { data } = await axios.get("/api/profile", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      const id = await VerifyAccessToken(data);
-
+      const id = VerifyAccessToken(data);
       setUserId(id);
     } catch (err) {
-      console.log(err);
+      const error = err as Error;
+      if (axios.isAxiosError(error)) {
+        const data = error.response?.data;
+
+        if (data == "Expired token") {
+          const id = await RefreshAccessToken();
+          setUserId(id);
+        }
+        if (data == "Invalid token") {
+          localStorage.removeItem("accessToken");
+        }
+      }
     }
   };
 

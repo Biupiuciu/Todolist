@@ -7,7 +7,7 @@ import { useState } from "react";
 import "./app.scss";
 
 export default function Home() {
-  axios.defaults.baseURL = "http://localhost:8080";
+  // axios.defaults.baseURL = "http://localhost:8080";
   axios.defaults.withCredentials = true;
 
   const [userId, setUserId] = useState(0);
