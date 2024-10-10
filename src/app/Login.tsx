@@ -22,6 +22,7 @@ export const Login = () => {
       if (response.data == "Username Duplicate") {
         console.log("duplicate");
       }
+      console.log(response.data);
       const { accessToken, id } = response.data;
       setUserId(id);
       localStorage.setItem("accessToken", JSON.stringify(accessToken));

@@ -31,7 +31,10 @@ export const Tasks = () => {
       const result = await VerifyAccessToken(data);
 
       if (result != 0) {
-        setLists(data.tasks);
+        const validJsonString = data.tasks.replace(/^'|'$/g, "");
+        const convertedTasks = JSON.parse(validJsonString);
+
+        setLists(convertedTasks);
         setTaskNum(data.taskNum);
       }
     } catch (err) {

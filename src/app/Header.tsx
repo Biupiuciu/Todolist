@@ -47,6 +47,11 @@ export const Header = () => {
   };
 
   const handleLogOut = () => {
+    setLists([
+      { tasks: [], title: "To do" },
+      { tasks: [], title: "In progress" },
+      { tasks: [], title: "Done" },
+    ]);
     setUserId(0);
     localStorage.removeItem("accessToken");
   };

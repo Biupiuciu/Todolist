@@ -10,15 +10,18 @@ const pool=mysql.createPool({
     host:db_host,
     user:db_user,
     password:db_pwd,
-    database:db_name
+    database:db_name,
+    port: 3306,    
 }).promise();
 
 const getLogInTasks=async(id)=>{
     
     try{
-        
+        // const [rows] = await pool.query('SELECT 1');
+        // console.log('连接成功:', rows);
         const [rows] = await pool.query('select tasks,taskNum from users where id='+id);
-        
+        console.log(rows);
+        console.log('test');
         if(rows[0]){
             
             return {tasks:rows[0].tasks,taskNum:rows[0].taskNum};
@@ -57,6 +60,7 @@ const getLoginInfo=async(Name)=>{
 }
 const createUser=async(Name,pwd)=>{
     try{
+        console.log('database-signup');
         console.log(`INSERT INTO users (username, pwd, tasks,taskNum) 
         VALUES ('${Name}', '${pwd}', '[{"tasks": [ {"id": "0", "content": "Task1"}], "title": "To do"}, {"tasks": [], "title": "In progress"}, {"tasks": [], "title": "Done"}]',1);`);
 

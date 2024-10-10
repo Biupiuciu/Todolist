@@ -22,10 +22,10 @@ const refreshTokenKey=process.env.REFRESH_TOKEN_PRIVATE_KEY;
 
 const generateAccessToken=async(id)=>{
     const payload={_id:id};
-    const accessToken=jwt.sign(payload,accessTokenKey,{expiresIn:'5s'});
+    const accessToken=jwt.sign(payload,accessTokenKey,{expiresIn:'1m'});
     const now=new Date();
     // const currentTime=now.getTime()+14 * 60 * 1000;
-    const currentTime=now.getTime()+5 * 1000;
+    const currentTime=now.getTime()+60 * 1000;
     return {value:accessToken,expiry:currentTime};
 }
 
