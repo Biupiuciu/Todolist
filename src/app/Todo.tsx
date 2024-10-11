@@ -52,9 +52,15 @@ export const Todo = () => {
         setShowMenu([-1, showMenu[1]]);
       }
     };
+
+    const handleResize = () => {
+      setShowMenu([-1, showMenu[1]]);
+    };
     document.addEventListener("click", handleDocumentClick);
+    window.addEventListener("resize", handleResize);
     return () => {
       document.removeEventListener("click", handleDocumentClick);
+      window.removeEventListener("resize", handleResize);
     };
   }, [showMenu]);
 

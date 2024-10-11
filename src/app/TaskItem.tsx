@@ -131,7 +131,9 @@ export const TaskItem = (props: ItemContent) => {
 
   return (
     <div
-      className={`item ${props.task.id != editId ? "" : "item-focus "} `}
+      className={`item ${props.task.id != editId ? "" : "item-focus "} ${
+        showMenu[0] > -1 ? "" : "item-hover"
+      }`}
       {...attributes}
       id={taskId}
       style={taskStyle}
