@@ -1,3 +1,4 @@
+<div align="left">
 # GETITDONE
 
 A full-stack to-do list web application built to help users organize and manage their tasks efficiently.
@@ -9,7 +10,7 @@ So far, only prereq is a ().
 ## Technologies
 - Neon PostgreSQL DB 
 - Nextjs + TypeScript
-- [dnd drag & drop kit](https://dndkit.com/) for 
+- [dnd - drag & drop kit](https://dndkit.com/) 
 
 ## Features
 - User Authentication: Securely sign up, log in, and log out of your account.
@@ -18,3 +19,4 @@ So far, only prereq is a ().
 - Responsive Design: Enjoy a seamless experience on all devices with a fully responsive layout.  
 
 
+</div>
