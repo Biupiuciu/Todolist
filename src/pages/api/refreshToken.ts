@@ -6,8 +6,8 @@ import { generateAccessToken } from "../../../server";
 import type { NextApiHandler} from 'next';
 // const {generateAccessToken}=require('/server');
 // require('dotenv').config();
-interface Decoded{
-  _id: String | Number
+interface Decoded {
+  _id: string | number;
 }
 const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY as string;;
 
