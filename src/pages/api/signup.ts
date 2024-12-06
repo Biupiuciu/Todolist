@@ -3,7 +3,7 @@
 import { setCookie } from "cookies-next";
 import { createUser, checkDuplicateUserName } from "../../../database";
 import { generateAccessToken, generateRefreshToken } from "../../../server";
-import type { NextApiHandler} from 'next'
+import type { NextApiHandler} from 'next';
 import bcrypt from "bcrypt";
 
 const signup:NextApiHandler = async (req, res) => {

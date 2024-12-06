@@ -3,7 +3,7 @@ import { setCookie } from "cookies-next";
 import { getLoginInfo } from "../../../database";
 // const {generateAccessToken,generateRefreshToken}=require('/server');
 import { generateAccessToken, generateRefreshToken } from "../../../server";
-import type { NextApiHandler} from 'next'
+import type { NextApiHandler} from 'next';
 const login:NextApiHandler = async (req, res) => {
   const { username, psd } = req.body;
 

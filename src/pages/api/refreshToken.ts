@@ -3,7 +3,7 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 // const jwt=require("jsonwebtoken");
 import { generateAccessToken } from "../../../server";
-import type { NextApiHandler} from 'next'
+import type { NextApiHandler} from 'next';
 // const {generateAccessToken}=require('/server');
 // require('dotenv').config();
 const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;

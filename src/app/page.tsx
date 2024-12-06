@@ -1,7 +1,7 @@
 "use client";
 
 import { Todo } from "./Todo";
-import { MyContext, ToDoList } from "./MyContext";
+import { MyContext } from "./MyContext";
 import axios from "axios";
 import { useState } from "react";
 import "./app.scss";
