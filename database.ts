@@ -10,7 +10,7 @@ export const getLogInTasks = async (id:number | string) => {
   try {
     // const [rows] = await pool.query('SELECT 1');
     // console.log('连接成功:', rows);
-    const [rows] = await pool.query(
+    const {rows} = await pool.query(
       "select tasks,taskNum from users where id=" + id,
     );
     console.log(rows);
@@ -23,23 +23,23 @@ export const getLogInTasks = async (id:number | string) => {
     console.log(err);
   }
 };
-export const updateTasks = async (id, { todoList, addNewTask }) => {
+export const updateTasks = async (id:string|number, { todoList, addNewTask }:any) => {  //any for now
   const newTasks = JSON.stringify(todoList);
   try {
     const queryRequest = addNewTask
       ? `UPDATE users SET taskNum=taskNum+1,tasks ='${newTasks} ' WHERE id = '${id}'`
       : `UPDATE users SET tasks ='${newTasks} ' WHERE id = '${id}'`;
-    const [rows] = await pool.query(queryRequest);
+    const res = await pool.query(queryRequest);
 
-    return rows.affectedRows;
+    return res.rowCount;
   } catch (err) {
     console.log(err);
   }
 };
 
-export const getLoginInfo = async (Name) => {
+export const getLoginInfo = async (Name:string) => {
   try {
-    const [rows] = await pool.query(
+    const {rows} = await pool.query(
       `SELECT * FROM users WHERE username = '${Name}'`,
     );
     if (rows[0]) {
@@ -64,7 +64,7 @@ export const createUser = async (Name: string, pwd: string) => {
 
     return result.rows[0].id;
   } catch (err) {
-    return err.code;
+    return err;
   }
 };
 
