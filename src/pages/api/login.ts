@@ -12,7 +12,7 @@ const login:NextApiHandler = async (req, res) => {
 
     //can't find the user or passwork incorrect
     if (!result || psd !== result.pwd) {
-      res.json("Unauthorized").status(401);
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -23,7 +23,7 @@ const login:NextApiHandler = async (req, res) => {
       res,
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
       maxAge: 14 * 24 * 60 * 60, // 7天
     });
     //send the access token to front end and set the http only cookie for storing refreshToken

@@ -6,7 +6,10 @@ import { generateAccessToken } from "../../../server";
 import type { NextApiHandler} from 'next';
 // const {generateAccessToken}=require('/server');
 // require('dotenv').config();
-const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
+interface Decoded{
+  _id: String | Number
+}
+const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY as string;;
 
 const refreshToken:NextApiHandler = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
@@ -20,9 +23,12 @@ const refreshToken:NextApiHandler = async (req, res) => {
       res.status(401).json("Invalid or missing authentication token");
       return;
     }
-
-    const accessToken = await generateAccessToken(decoded._id);
-    res.status(201).json({ accessToken, id: decoded._id });
+if (decoded){
+  const decodedPayload = decoded as Decoded;
+  const accessToken = await generateAccessToken(decodedPayload._id);
+  res.status(201).json({ accessToken, id: decodedPayload._id });
+}
+    
   });
 };
 
