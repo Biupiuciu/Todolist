@@ -6,7 +6,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export const getLogInTasks = async (id) => {
+export const getLogInTasks = async (id:number | string) => {
   try {
     // const [rows] = await pool.query('SELECT 1');
     // console.log('连接成功:', rows);
