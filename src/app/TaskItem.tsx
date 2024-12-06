@@ -122,7 +122,7 @@ export const TaskItem = (props: ItemContent) => {
     setShowMenu([-1, showMenu[1]]);
     const updatedLists = [...lists];
     updatedLists[showMenu[1]].tasks = updatedLists[showMenu[1]].tasks.filter(
-      (task) => task.id != showMenu[0].toString()
+      (task) => task.id != showMenu[0].toString(),
     );
 
     setLists(updatedLists);

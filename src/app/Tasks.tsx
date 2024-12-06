@@ -52,7 +52,7 @@ export const Tasks = () => {
     activeIndex: any,
     overContainer: any,
     overIndex: any,
-    task: any
+    task: any,
   ) => {
     const updatedLists = lists.map((list: any) => {
       if (list.title == activeContainer) {
@@ -97,7 +97,7 @@ export const Tasks = () => {
           activeIndex,
           overContainer,
           overIndex,
-          task
+          task,
         );
         UpdateTasksDB({ todoList: newLists }, userId);
         return newLists;

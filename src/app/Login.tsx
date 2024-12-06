@@ -5,6 +5,7 @@ import Image from "next/image";
 import axios from "axios";
 import { MyContext } from "./MyContext";
 import taskImg from "../asset/Task management system for productivity.png";
+
 export const Login = () => {
   const [userName, setUserName] = useState("");
   const [psd, setPsd] = useState("");
@@ -13,21 +14,22 @@ export const Login = () => {
 
   const handleLogin = async () => {
     const path = isForLogin ? "/api/login" : "/api/signup";
+
     try {
       const response = await axios.post(path, {
         username: userName,
         psd: psd,
       });
 
-      if (response.data == "Username Duplicate") {
-        console.log("duplicate");
-      }
       console.log(response.data);
       const { accessToken, id } = response.data;
       setUserId(id);
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.log("catched:", err, "?");
+      if (err.response.data == "Username Duplicate") {
+        console.log("duplicate");
+      }
     }
   };
   const handleUsernameChanged = (e: any) => {

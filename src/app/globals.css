@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
-input{
+input {
   border: 1px black solid;
 }

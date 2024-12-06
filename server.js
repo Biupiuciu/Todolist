@@ -16,28 +16,28 @@
 //   allowedHeaders: ['Content-Type', 'Authorization'],
 // }));
 
-const jwt=require("jsonwebtoken");
-const accessTokenKey=process.env.ACCESS_TOKEN_PRIVATE_KEY;
-const refreshTokenKey=process.env.REFRESH_TOKEN_PRIVATE_KEY;
+const jwt = require("jsonwebtoken");
+const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
+const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
 
-const generateAccessToken=async(id)=>{
-    const payload={_id:id};
-    const accessToken=jwt.sign(payload,accessTokenKey,{expiresIn:'1m'});
-    const now=new Date();
-    // const currentTime=now.getTime()+14 * 60 * 1000;
-    const currentTime=now.getTime()+60 * 1000;
-    return {value:accessToken,expiry:currentTime};
-}
+export const generateAccessToken = async (id) => {
+  const payload = { _id: id };
+  const accessToken = jwt.sign(payload, accessTokenKey, { expiresIn: "1m" });
+  const now = new Date();
+  // const currentTime=now.getTime()+14 * 60 * 1000;
+  const currentTime = now.getTime() + 60 * 1000;
+  return { value: accessToken, expiry: currentTime };
+};
 
-const generateRefreshToken=async(id)=>{
-  const payload={_id:id};
-  const refreshToken=jwt.sign(payload,refreshTokenKey,{expiresIn:'14d'});
+export const generateRefreshToken = async (id) => {
+  const payload = { _id: id };
+  const refreshToken = jwt.sign(payload, refreshTokenKey, { expiresIn: "14d" });
   return refreshToken;
-}
+};
 
 // app.post('/signup',async(req,res)=>{
 //   const{username,psd}=req.body;
-  
+
 //   try{
 //     const result=await createUser(username,psd);
 //     console.log(result);
@@ -53,7 +53,7 @@ const generateRefreshToken=async(id)=>{
 //       const refreshToken=await generateRefreshToken(result);
 //       res .cookie('refreshToken',refreshToken,{
 //         httpOnly: true,
-//         secure: true,  
+//         secure: true,
 //         sameSite: 'None',
 //         maxAge: 14 * 24 * 60 * 60 * 1000 // 7 天cor
 //       })
@@ -76,14 +76,14 @@ const generateRefreshToken=async(id)=>{
 //         res.json("Unauthorized").status(401);
 //         return;
 //       }
-      
+
 //       const accessToken=await generateAccessToken(result.id);
 //       const refreshToken=await generateRefreshToken(result.id);
-     
+
 //       //send the access token to front end and set the http only cookie for storing refreshToken
 //       res.cookie('refreshToken',refreshToken,{
 //             httpOnly: true,
-//             secure: true,  
+//             secure: true,
 //             sameSite: 'None',
 //             maxAge: 14 * 24 * 60 * 60 * 1000 // 7 天cor
 //           })
@@ -102,21 +102,19 @@ const generateRefreshToken=async(id)=>{
 
 // jwt.verify(accessToken,accessTokenKey,(err,decoded)=>{
 
- 
 //   if(err){
 //     if(err.message=='jwt expired'){
 //       return res.json('Expired token').status(401);
 //     }
 //     console.log('1:',err.message);
-//     return res.json('Invalid token').status(401); 
+//     return res.json('Invalid token').status(401);
 //   }
 
-//   //for send the ID to frontend 
+//   //for send the ID to frontend
 //   req.id=decoded._id;
 //   next();
 // });
 
-  
 // }
 
 // app.use('/profile/:id?', profileMiddleware);
@@ -125,7 +123,7 @@ const generateRefreshToken=async(id)=>{
 //   const id = req.params.id;
 //   try{
 //     const result=await getLogInTasks(id);
-   
+
 //     res.json({id:req.id,tasks:result.tasks,taskNum:result.taskNum});
 //   }catch(err){
 //     console.log(err);
@@ -163,25 +161,22 @@ const generateRefreshToken=async(id)=>{
 //       res.json('Invalid or missing authentication token').status(401);
 //       return;
 //     }
-    
+
 //     const accessToken=await generateAccessToken(decoded._id);
 //     res.json({accessToken,id:decoded._id}).status(201);
-    
-  
+
 //   })
 
 // });
 
 // app.get('/profile',(req,res)=>{
-  
+
 //   if(req.id){
-    
+
 //     res.status(200).json({id:req.id});
 //   }
-  
+
 // });
 // app.listen(8080,()=>{
 //     console.log("PORT LISTENING");
 // });
-
-module.exports={generateAccessToken,generateRefreshToken};
