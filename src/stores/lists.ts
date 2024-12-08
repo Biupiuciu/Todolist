@@ -10,7 +10,7 @@ export interface List{
     title:ListTitle
 }
 
-export const listStore = create((set) => ({
+export const listStore = create(() => ({
     lists: Array<List>,
   }));
 

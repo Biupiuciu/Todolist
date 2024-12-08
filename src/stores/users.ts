@@ -6,7 +6,7 @@ export interface User{
   username?:string,
 }
 
-export const userStore = create((set) => ({
+export const userStore = create(() => ({
     user:{} 
   }));
 
