@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { MyContext } from "./MyContext";
+import { Button } from "../components/Button";
+
 import taskImg from "../asset/Task management system for productivity.png";
 
 export const Login = () => {
@@ -66,9 +68,12 @@ export const Login = () => {
               />
             </div>
             <div className="LoginOrSignup">
-              <button className="button-4  button-width" onClick={handleLogin}>
-                {isForLogin ? "Login" : "Signup"}
-              </button>
+              <Button
+                value={isForLogin ? "Login" : "Signup"}
+                clickHandler={handleLogin}
+                classname="button-width"
+              />
+
               <div
                 className="switchLoginOrSignup"
                 onClick={() => {

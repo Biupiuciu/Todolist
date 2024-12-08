@@ -3,6 +3,7 @@ import React, { useRef, useContext, useEffect } from "react";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { UpdateTasksDB } from "./TaskItem";
 import { ToDoList } from "./MyContext";
+import { Button } from "../components/Button";
 export const Header = () => {
   const inputRef = useRef(document.getElementById(`0`));
   const {
@@ -64,9 +65,10 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="button-4" onClick={handleLogOut}>
+      <Button value="Log out " clickHandler={handleLogOut} />
+      {/* <div className="button-4" onClick={handleLogOut}>
         Log out
-      </div>
+      </div> */}
     </div>
   );
 };

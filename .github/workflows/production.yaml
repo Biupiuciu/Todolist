@@ -10,10 +10,28 @@ on:
      - main
 
 jobs:
+  Test:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+
+      - name: Install dependencies
+        run: npm install 
+
+      - name: Run tests
+        run: npm run test
+
   Deploy-Production:
-    runs-on: ubuntu-latest #what's this
+    runs-on: ubuntu-latest 
     steps: 
-     - uses: actions/checkout@v3 #for cheicng repo
+     - uses: actions/checkout@v3 #for checking repo
      
      - name: Install Vercel CLI
        run: npm install --global vercel
