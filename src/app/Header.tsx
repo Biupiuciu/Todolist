@@ -4,6 +4,7 @@ import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { UpdateTasksDB } from "./TaskItem";
 import { ToDoList } from "./MyContext";
 import { Button } from "../components/Button";
+import { UserAPI } from "@/stores/users";
 export const Header = () => {
   const inputRef = useRef(document.getElementById(`0`));
   const {
@@ -48,13 +49,7 @@ export const Header = () => {
   };
 
   const handleLogOut = () => {
-    setLists([
-      { tasks: [], title: "To do" },
-      { tasks: [], title: "In progress" },
-      { tasks: [], title: "Done" },
-    ]);
-    setUserId(0);
-    localStorage.removeItem("accessToken");
+    UserAPI.logOut();
   };
   return (
     <div className="kanbanTitle">
@@ -66,9 +61,6 @@ export const Header = () => {
       </div>
 
       <Button value="Log out " clickHandler={handleLogOut} />
-      {/* <div className="button-4" onClick={handleLogOut}>
-        Log out
-      </div> */}
     </div>
   );
 };

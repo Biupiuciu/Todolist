@@ -4,6 +4,7 @@ import { MyContext } from "./MyContext";
 import { Login } from "./Login";
 import axios from "axios";
 import { Tasks } from "./Tasks";
+import { UserAPI } from "../stores/users";
 
 export const GetAccessToken = () => {
   let accessToken;
@@ -93,7 +94,10 @@ export const Todo = () => {
   };
 
   useEffect(() => {
-    isLogIn();
+    const testAuth = async () => {
+      await UserAPI.getAuth();
+    };
+    testAuth();
   }, []);
 
   return <>{userId > 0 ? <Tasks /> : <Login></Login>}</>;

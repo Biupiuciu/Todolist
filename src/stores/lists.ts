@@ -10,8 +10,18 @@ export interface List{
     title:ListTitle
 }
 
-export const listStore = create(() => ({
-    lists: Array<List>,
+const DEFAULT_LIST=[
+    { tasks: [], title: "To do" },
+    { tasks: [], title: "In progress" },
+    { tasks: [], title: "Done" },
+  ] as Array<List>
+
+export const listStore = create<{
+    lists:Array<List>;
+    resetLists:()=>void
+}>((set) => ({
+    lists: DEFAULT_LIST,
+    resetLists:()=>set(()=>({lists:DEFAULT_LIST}))
   }));
 
   export class ListAPI{

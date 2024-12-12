@@ -5,34 +5,35 @@ import Image from "next/image";
 import axios from "axios";
 import { MyContext } from "./MyContext";
 import { Button } from "../components/Button";
-
+import { UserAPI } from "../stores/users";
 import taskImg from "../asset/Task management system for productivity.png";
 
 export const Login = () => {
   const [userName, setUserName] = useState("");
   const [psd, setPsd] = useState("");
   const [isForLogin, setIsForLogin] = useState(true);
-  const { setUserId } = useContext(MyContext);
 
-  const handleLogin = async () => {
-    const path = isForLogin ? "/api/login" : "/api/signup";
-
+  const handleClick = async () => {
     try {
-      const response = await axios.post(path, {
-        username: userName,
-        psd: psd,
-      });
-
-      console.log(response.data);
-      const { accessToken, id } = response.data;
-      setUserId(id);
-      localStorage.setItem("accessToken", JSON.stringify(accessToken));
-    } catch (err: any) {
-      console.log("catched:", err, "?");
-      if (err.response.data == "Username Duplicate") {
-        console.log("duplicate");
-      }
+    } catch (err) {
+      console.log(err);
     }
+    // const path = isForLogin ? "/api/login" : "/api/signup";
+    // try {
+    //   const response = await axios.post(path, {
+    //     username: userName,
+    //     psd: psd,
+    //   });
+    //   console.log(response.data);
+    //   const { accessToken, id } = response.data;
+    //   setUserId(id);
+    //   localStorage.setItem("accessToken", JSON.stringify(accessToken));
+    // } catch (err: any) {
+    //   console.log("catched:", err, "?");
+    //   if (err.response.data == "Username Duplicate") {
+    //     console.log("duplicate");
+    //   }
+    // }
   };
   const handleUsernameChanged = (e: any) => {
     setUserName(e.currentTarget.value);
@@ -70,7 +71,7 @@ export const Login = () => {
             <div className="LoginOrSignup">
               <Button
                 value={isForLogin ? "Login" : "Signup"}
-                clickHandler={handleLogin}
+                clickHandler={handleClick}
                 classname="button-width"
               />
 
