@@ -1,20 +1,23 @@
 "use client";
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react";
 import Image from "next/image";
-import axios from "axios";
-import { MyContext } from "./MyContext";
 import { Button } from "../components/Button";
 import { UserAPI } from "../stores/users";
 import taskImg from "../asset/Task management system for productivity.png";
 
 export const Login = () => {
   const [userName, setUserName] = useState("");
-  const [psd, setPsd] = useState("");
+  const [pwd, setPwd] = useState("");
   const [isForLogin, setIsForLogin] = useState(true);
 
   const handleClick = async () => {
     try {
+      if (isForLogin) {
+        await UserAPI.logIn(userName, pwd);
+      } else {
+        await UserAPI.signUp(userName, pwd);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -39,7 +42,7 @@ export const Login = () => {
     setUserName(e.currentTarget.value);
   };
   const handlePwdChanged = (e: any) => {
-    setPsd(e.currentTarget.value);
+    setPwd(e.currentTarget.value);
   };
   return (
     <div className="background">
@@ -64,7 +67,7 @@ export const Login = () => {
               <input
                 placeholder="Password"
                 type="password"
-                value={psd}
+                value={pwd}
                 onChange={handlePwdChanged}
               />
             </div>

@@ -3,45 +3,14 @@ import { useContext, LegacyRef, createRef, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import axios from "axios";
-import { GetAccessToken, RefreshAccessToken } from "./Todo";
+import { listStore, type Task } from "../stores/lists";
+import { ListAPI } from "../stores/lists";
+import { userStore } from "@/stores/users";
 interface ItemContent {
-  task: {
-    content: string | number | readonly string[] | undefined;
-    id: string;
-  };
+  task: Task;
   id: number;
   listId: number;
 }
-
-export const UpdateTasksDB = async (lists: any, userId: number) => {
-  const accessToken = GetAccessToken();
-  try {
-    const { status } = await axios.post(`/api/profile/${userId}`, lists, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (status == 200) {
-      console.log("Update Successfully!");
-      return;
-    }
-    throw new Error("Failed");
-  } catch (err) {
-    const error = err as Error;
-    if (axios.isAxiosError(error)) {
-      const data = error.response?.data;
-      if (data == "Expired token") {
-        const refreshResult = await RefreshAccessToken();
-        if (refreshResult == userId) {
-          await UpdateTasksDB(lists, userId);
-        }
-      }
-    }
-  }
-};
 
 export const TaskItem = (props: ItemContent) => {
   const pElementRef: LegacyRef<HTMLParagraphElement> | undefined = createRef();
@@ -56,14 +25,15 @@ export const TaskItem = (props: ItemContent) => {
     setShowMenu,
     menuPosition,
     setMenuPosition,
-    lists,
-    userId,
     setEditId,
     setIsEditting,
     isEditting,
     editId,
-    setLists,
   } = useContext(MyContext);
+
+  const user = userStore((state) => state.user);
+  const userId = user.id as number;
+  const { lists, setLists } = listStore.getState();
 
   useEffect(() => {
     if (pElementRef?.current && taskId == editId && isEditting) {
@@ -93,20 +63,22 @@ export const TaskItem = (props: ItemContent) => {
     updatedLists[listId] = { ...listToUpdate, tasks: updatedTasks };
 
     setLists(updatedLists);
-    UpdateTasksDB({ todoList: updatedLists, addNewTask: false }, userId);
+    ListAPI.UpdateTasksDB(
+      { todoList: updatedLists, addNewTask: false },
+      userId
+    );
   };
 
   const MakeItEditable = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(taskId);
     e.preventDefault();
     setIsEditting(true);
-    setEditId(taskId);
+    setEditId(taskId as number);
   };
 
   const FinishEditting = (event: any) => {
     if (event.key === "Enter") {
       setIsEditting(false);
-      setEditId("");
+      setEditId(-1);
       const updatedtask = event.currentTarget.textContent;
       updateList(updatedtask);
     }
@@ -122,11 +94,11 @@ export const TaskItem = (props: ItemContent) => {
     setShowMenu([-1, showMenu[1]]);
     const updatedLists = [...lists];
     updatedLists[showMenu[1]].tasks = updatedLists[showMenu[1]].tasks.filter(
-      (task) => task.id != showMenu[0].toString(),
+      (task) => task.id != showMenu[0]
     );
 
     setLists(updatedLists);
-    UpdateTasksDB({ todoList: updatedLists }, userId);
+    ListAPI.UpdateTasksDB({ todoList: updatedLists }, userId);
   };
 
   return (
@@ -135,7 +107,7 @@ export const TaskItem = (props: ItemContent) => {
         showMenu[0] > -1 ? "" : "item-hover"
       }`}
       {...attributes}
-      id={taskId}
+      id={taskId.toString()}
       style={taskStyle}
       ref={setNodeRef}
       onDoubleClick={MakeItEditable}
@@ -163,7 +135,7 @@ export const TaskItem = (props: ItemContent) => {
           const updatedtask = e.currentTarget.textContent;
           updateList(updatedtask);
           setIsEditting(false);
-          setEditId("");
+          setEditId(-1);
         }}
       >
         {content || ""}

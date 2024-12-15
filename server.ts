@@ -16,24 +16,24 @@
 //   allowedHeaders: ['Content-Type', 'Authorization'],
 // }));
 
-const jwt = require("jsonwebtoken");
-const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
-const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
+// const jwt = require("jsonwebtoken");
+// const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
+// // const refreshTokenKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
 
-export const generateAccessToken = async (id) => {
-  const payload = { _id: id };
-  const accessToken = jwt.sign(payload, accessTokenKey, { expiresIn: "1m" });
-  const now = new Date();
-  // const currentTime=now.getTime()+14 * 60 * 1000;
-  const currentTime = now.getTime() + 60 * 1000;
-  return { value: accessToken, expiry: currentTime };
-};
+// export const generateAccessToken = async (id) => {
+//   const payload = { _id: id };
+//   const accessToken = jwt.sign(payload, accessTokenKey, { expiresIn: "1m" });
+//   const now = new Date();
+//   // const currentTime=now.getTime()+14 * 60 * 1000;
+//   const currentTime = now.getTime() + 60 * 1000;
+//   return { value: accessToken, expiry: currentTime };
+// };
 
-export const generateRefreshToken = async (id) => {
-  const payload = { _id: id };
-  const refreshToken = jwt.sign(payload, refreshTokenKey, { expiresIn: "14d" });
-  return refreshToken;
-};
+// export const generateRefreshToken = async (id) => {
+//   const payload = { _id: id };
+//   const refreshToken = jwt.sign(payload, refreshTokenKey, { expiresIn: "14d" });
+//   return refreshToken;
+// };
 
 // app.post('/signup',async(req,res)=>{
 //   const{username,psd}=req.body;

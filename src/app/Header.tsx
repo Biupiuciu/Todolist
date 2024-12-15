@@ -1,51 +1,52 @@
 import { MyContext } from "./MyContext";
 import React, { useRef, useContext, useEffect } from "react";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import { UpdateTasksDB } from "./TaskItem";
-import { ToDoList } from "./MyContext";
+import { ListAPI } from "@/stores/lists";
 import { Button } from "../components/Button";
-import { UserAPI } from "@/stores/users";
+import { UserAPI, userStore } from "@/stores/users";
+import { listStore } from "@/stores/lists";
 export const Header = () => {
   const inputRef = useRef(document.getElementById(`0`));
+  const { firstTimeFocused, setIsEditting, setEditId, setFirstTimeFocused } =
+    useContext(MyContext);
+
+  const user = userStore((state) => state.user);
+  const userId = user.id as number;
   const {
-    userId,
-    setUserId,
+    tasknum: taskNum,
     setTaskNum,
     setLists,
-    taskNum,
-    firstTimeFocused,
-    setIsEditting,
-    setEditId,
-    setFirstTimeFocused,
-  } = useContext(MyContext);
+    lists,
+  } = listStore.getState();
+
   useEffect(() => {
     //focus
     const task = taskNum - 1;
     inputRef.current = document.getElementById(task.toString());
     if (inputRef.current && taskNum > 1 && firstTimeFocused) {
       setIsEditting(true);
-      setEditId(task.toString());
+      setEditId(task);
     }
   }, [taskNum]);
+
   const handleAddTask = () => {
-    setLists((preList: ToDoList) => {
-      const newList = [...preList];
-      const newTask = { content: "", id: taskNum.toString() };
-      const firstList = preList[0];
-      const newTasks = firstList.tasks
-        ? [...firstList.tasks, newTask]
-        : [newTask];
+    const newList = [...lists];
+    const newTask = { content: "", id: taskNum };
+    const firstList = lists[0];
+    const newTasks = firstList.tasks
+      ? [...firstList.tasks, newTask]
+      : [newTask];
 
-      newList[0] = {
-        ...firstList,
-        tasks: newTasks,
-      };
+    newList[0] = {
+      ...firstList,
+      tasks: newTasks,
+    };
 
-      UpdateTasksDB({ todoList: newList, addNewTask: true }, userId);
-      setTaskNum(taskNum + 1);
-      setFirstTimeFocused(true);
-      return newList;
-    });
+    ListAPI.UpdateTasksDB({ todoList: newList, addNewTask: true }, userId);
+    setTaskNum(taskNum + 1);
+    setFirstTimeFocused(true);
+
+    setLists(newList);
   };
 
   const handleLogOut = () => {

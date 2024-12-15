@@ -1,9 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { MyContext } from "./MyContext";
-import axios from "axios";
-import { GetAccessToken, VerifyAccessToken } from "./Todo";
+import React, { useEffect } from "react";
 import { Droppable } from "./Droppable";
-import { ToDoList } from "./MyContext";
 import { arrayMove, insertAtIndex, removeAtIndex } from "./array";
 import {
   DndContext,
@@ -11,39 +7,25 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { UpdateTasksDB } from "./TaskItem";
+
 import { Header } from "./Header";
 
+import { ListAPI, Task } from "@/stores/lists";
+import { userStore } from "@/stores/users";
+import { listStore } from "@/stores/lists";
 export type ListType = "todo" | "inpro" | "done";
+
 export const Tasks = () => {
-  const { userId, setTaskNum, setLists, lists } = useContext(MyContext);
+  const user = userStore((state) => state.user);
+  const userId = user.id as number;
+
+  const { lists, setLists } = listStore.getState();
   const listTypes = ["todo", "inpro", "done"];
-  const accessToken = GetAccessToken();
+
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const getTasks = async (id: number) => {
-    try {
-      const { data } = await axios.get(`/api/profile/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const result = await VerifyAccessToken(data);
-
-      if (result != 0) {
-        const validJsonString = data.tasks.replace(/^'|'$/g, "");
-        const convertedTasks = JSON.parse(validJsonString);
-
-        setLists(convertedTasks);
-        setTaskNum(data.taskNum);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
-    getTasks(userId);
+    ListAPI.getTasks(userId);
   }, []);
 
   const moveBetweenContainers = (
@@ -52,7 +34,7 @@ export const Tasks = () => {
     activeIndex: any,
     overContainer: any,
     overIndex: any,
-    task: any,
+    task: any
   ) => {
     const updatedLists = lists.map((list: any) => {
       if (list.title == activeContainer) {
@@ -90,18 +72,16 @@ export const Tasks = () => {
     })[0].tasks[activeIndex];
 
     if (activeContainer !== overContainer) {
-      setLists((lists: ToDoList) => {
-        const newLists = moveBetweenContainers(
-          lists,
-          activeContainer,
-          activeIndex,
-          overContainer,
-          overIndex,
-          task,
-        );
-        UpdateTasksDB({ todoList: newLists }, userId);
-        return newLists;
-      });
+      const newLists = moveBetweenContainers(
+        lists,
+        activeContainer,
+        activeIndex,
+        overContainer,
+        overIndex,
+        task
+      );
+      ListAPI.UpdateTasksDB({ todoList: newLists }, userId);
+      setLists(newLists);
     }
   };
 
@@ -121,19 +101,17 @@ export const Tasks = () => {
 
       const activeIndex = active.data.current.sortable.index;
       const overIndex = over.data.current?.sortable.index || 0;
-      setLists((lists: ToDoList) => {
-        const newList = lists.map((list) => {
-          if (list.title == overContainer) {
-            return {
-              ...list,
-              tasks: arrayMove(list.tasks, activeIndex, overIndex),
-            };
-          }
-          return { ...list };
-        });
-        UpdateTasksDB({ todoList: newList }, userId);
-        return newList;
+      const newList = lists.map((list) => {
+        if (list.title == overContainer) {
+          return {
+            ...list,
+            tasks: arrayMove(list.tasks, activeIndex, overIndex) as Array<Task>,
+          };
+        }
+        return { ...list };
       });
+      ListAPI.UpdateTasksDB({ todoList: newList }, userId);
+      setLists(newList);
     }
   };
 

@@ -1,41 +1,39 @@
 import { setCookie } from "cookies-next";
-// const {getLoginInfo}=require('/database');
-import { getLoginInfo } from "../../../database";
-// const {generateAccessToken,generateRefreshToken}=require('/server');
-import { generateAccessToken, generateRefreshToken } from "../../../server";
-import type { NextApiHandler} from 'next';
-const login:NextApiHandler = async (req, res) => {
+import {pool} from "../../../database"
+import { UserAPI } from "@/stores/users";
+import type { NextApiHandler } from "next";
+import bcrypt from "bcrypt";
+const login: NextApiHandler = async (req, res) => {
   const { username, psd } = req.body;
-
   try {
-    const result = await getLoginInfo(username);
 
-    //can't find the user or passwork incorrect
-    if (!result || psd !== result.pwd) {
-      res.status(401).json("Unauthorized");
-      return;
+    const { rows } = await pool.query(
+      `SELECT id, pwd FROM users WHERE username = '${username}'`,
+    );
+    if (rows.length!=1) {
+      throw new Error("Can't find user");
     }
 
-    const accessToken = await generateAccessToken(result.id);
-    const refreshToken = await generateRefreshToken(result.id);
-    setCookie("refreshToken", refreshToken, {
-      req,
-      res,
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 14 * 24 * 60 * 60, // 7天
-    });
-    //send the access token to front end and set the http only cookie for storing refreshToken
+
+    await bcrypt.hash(psd, 10, async (err, hashedPwd) => {
+      if (err) {
+        console.log("unable to create hashed PWD");
+        throw new Error();
+      }
+
+    })
+
+    const isMatch = await bcrypt.compare(psd,rows[0].pwd);
+
+    if(!isMatch){
+      throw new Error("unMatched");
+    }
+    const accessToken = await UserAPI.generateAccessToken(rows[0].id);
+
     res
       .status(201)
-      //   cookie('refreshToken',refreshToken,{
-      //         httpOnly: true,
-      //         secure: true,
-      //         sameSite: 'None',
-      //         maxAge: 14 * 24 * 60 * 60 * 1000 // 7 天cor
-      //       })
-      .json({ accessToken, id: result.id });
+      .json({ accessToken });
+
   } catch (err) {
     console.log(err);
   }

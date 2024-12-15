@@ -1,51 +1,44 @@
-// const {createUser}=require('/database');
-// const {generateAccessToken,generateRefreshToken}=require('/server');
-import { setCookie } from "cookies-next";
-import { createUser, checkDuplicateUserName } from "../../../database";
-import { generateAccessToken, generateRefreshToken } from "../../../server";
-import type { NextApiHandler} from 'next';
-import bcrypt from "bcrypt";
 
-const signup:NextApiHandler = async (req, res) => {
+import type { NextApiHandler } from "next";
+import bcrypt from "bcrypt";
+import {pool} from "../../../database";
+import { UserAPI } from "@/stores/users";
+const signup: NextApiHandler = async (req, res) => {
   const { username, psd } = req.body;
- 
+
   try {
-    const noDuplicateUserName = await checkDuplicateUserName(username);
+   
+    const { rows } = await pool.query(
+      `SELECT * FROM users WHERE username = '${username}'`,
+    );
+    const noDuplicateUserName=rows.length == 0;
+
     if (!noDuplicateUserName) {
       res.status(401).json("Username Duplicate");
       return;
     }
 
-    bcrypt.hash(psd, 10, async (err, hashedPwd) => {
-      if (err) {
-        console.log("unable to create hashed PWD");
-        throw new Error();
-      }
+    const hashedPwd=await bcrypt.hash(psd, 10);
 
-      const result = await createUser(username, hashedPwd);
+    const result =
+      await pool.query(`INSERT INTO users (username, pwd, tasks,taskNum) 
+        VALUES ('${username}', '${hashedPwd}', '[{"tasks": [ {"id": "0", "content": "Task1"}], "title": "To do"}, {"tasks": [], "title": "In progress"}, {"tasks": [], "title": "Done"}]',1) RETURNING id;;`);
 
-      if (!result) {
+    const { rowCount } = result;
+
+    if (rowCount != 1||!result) {
+     
         res.status(401).json("SignUpFailed");
         return;
-      }
+      
+    }
 
-      console.log("Created:", result);
+    const accessToken = await UserAPI.generateAccessToken(result.rows[0].id);
+    
+    res.status(201).json({ accessToken});
 
-      const accessToken = await generateAccessToken(result);
-      const refreshToken = await generateRefreshToken(result);
-
-      setCookie("refreshToken", refreshToken, {
-        req,
-        res,
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 14 * 24 * 60 * 60, // 7天
-      });
-      res.status(201).json({ accessToken, id: result });
-    });
   } catch (err) {
-    // console.log(err[0])
+
     console.log(err);
     res.status(500).json("error");
   }
