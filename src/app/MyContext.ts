@@ -18,16 +18,16 @@ interface MyContextType {
 export const MyContext = createContext<MyContextType>({
  
   firstTimeFocused: false,
-  setFirstTimeFocused: (object: boolean) => {object},
+  setFirstTimeFocused: (object: boolean) => {object;},
   menuPosition: { x: 0, y: 0 },
-  setMenuPosition: (object: any) => {object },
+  setMenuPosition: (object: any) => {object ;},
 
   //first digit:-1 -- unvisible >-1 -- show which task's menu
   //second digit:which list
   showMenu: [-1, -1],
-  setShowMenu: (int: number[]) => {int },
+  setShowMenu: (int: number[]) => {int ;},
   isEditting: false,
-  setIsEditting: (boolean: boolean) => {boolean},
+  setIsEditting: (boolean: boolean) => {boolean;},
   editId: -1,
-  setEditId: (id: number) => {id },
+  setEditId: (id: number) => {id ;},
 });
