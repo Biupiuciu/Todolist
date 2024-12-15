@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { listStore } from "./lists";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
 export interface User {
   id?: number;

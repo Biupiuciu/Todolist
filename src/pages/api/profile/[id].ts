@@ -39,8 +39,8 @@ return async(req:NextApiRequest,res:NextApiResponse)=>{
           if(id==_id)
             return handler(req, res); 
         });
-}
-}
+};
+};
 const handler: NextApiHandler = async (req, res) => {
  
   
@@ -62,7 +62,7 @@ const handler: NextApiHandler = async (req, res) => {
      
       const queryRequest = addNewTask
       ? `UPDATE users SET taskNum=taskNum+1,tasks ='${JSON.stringify(todoList)} ' WHERE id = '${id}'`
-      : `UPDATE users SET tasks ='${JSON.stringify(todoList)} ' WHERE id = '${id}'`;
+      : `UPDATE users SET tasks ='${todoList} ' WHERE id = '${id}'`;
     const result = await pool.query(queryRequest);
 
     if(result.rowCount!=1){

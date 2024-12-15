@@ -1,5 +1,5 @@
-import { setCookie } from "cookies-next";
-import {pool} from "../../../database"
+
+import {pool} from "../../../database";
 import { UserAPI } from "@/stores/users";
 import type { NextApiHandler } from "next";
 import bcrypt from "bcrypt";
@@ -14,14 +14,6 @@ const login: NextApiHandler = async (req, res) => {
       throw new Error("Can't find user");
     }
 
-
-    await bcrypt.hash(psd, 10, async (err, hashedPwd) => {
-      if (err) {
-        console.log("unable to create hashed PWD");
-        throw new Error();
-      }
-
-    })
 
     const isMatch = await bcrypt.compare(psd,rows[0].pwd);
 
