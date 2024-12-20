@@ -13,6 +13,8 @@ interface MyContextType {
   setIsEditting: (value: boolean) => void;
   editId: number|undefined;
   setEditId: (value: number) => void;
+  isHomePage:boolean;
+  setIsHomePage: (value: boolean) => void;
 }
 
 export const MyContext = createContext<MyContextType>({
@@ -30,4 +32,6 @@ export const MyContext = createContext<MyContextType>({
   setIsEditting: (boolean: boolean) => {boolean;},
   editId: -1,
   setEditId: (id: number) => {id ;},
+  isHomePage:true,
+  setIsHomePage: (boolean: boolean) => {boolean;},
 });

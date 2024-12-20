@@ -11,7 +11,7 @@ export default function Home() {
   const [showMenu, setShowMenu] = useState<[number, number]>([-1, -1]);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [firstTimeFocused, setFirstTimeFocused] = useState(false);
-
+  const [isHomePage, setIsHomePage] = useState(true);
   return (
     <MyContext.Provider
       value={{
@@ -25,6 +25,8 @@ export default function Home() {
         setEditId,
         firstTimeFocused,
         setFirstTimeFocused,
+        isHomePage,
+        setIsHomePage,
       }}
     >
       <Todo />

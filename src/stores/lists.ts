@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+import { UserAPI } from "./users";
 type ListTitle = "To do" | "In progress" | "Done";
 export interface Task {
   id: number;
@@ -53,6 +53,9 @@ export class ListAPI {
         console.log("Update Successfully!");
         return;
       }
+      if(status==401){
+        UserAPI.logOut();
+      }
       throw new Error("Failed");
 
     }catch(err){
@@ -75,9 +78,13 @@ export class ListAPI {
               Authorization: `Bearer ${token}`,
             },
           });
-         
+
+          if(res.status==401){
+            UserAPI.logOut();
+          }
+          
           const {lists,taskNum}=await res.json();
-          console.log(lists,' ',taskNum);
+          
          const { setTaskNum, setLists} = listStore.getState();
          setTaskNum(taskNum);
          const validJsonString = lists.replace(/^'|'$/g, "");

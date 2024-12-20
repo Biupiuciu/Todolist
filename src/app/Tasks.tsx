@@ -9,7 +9,6 @@ import {
 } from "@dnd-kit/core";
 
 import { Header } from "./Header";
-
 import { ListAPI, Task } from "@/stores/lists";
 import { userStore } from "@/stores/users";
 import { listStore } from "@/stores/lists";
@@ -18,8 +17,8 @@ export type ListType = "todo" | "inpro" | "done";
 export const Tasks = () => {
   const user = userStore((state) => state.user);
   const userId = user.id as number;
-
-  const { lists, setLists } = listStore.getState();
+  const lists = listStore((state) => state.lists);
+  const { setLists } = listStore.getState();
   const listTypes = ["todo", "inpro", "done"];
 
   const sensors = useSensors(useSensor(PointerSensor));

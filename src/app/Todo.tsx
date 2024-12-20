@@ -37,5 +37,14 @@ export const Todo = () => {
     testAuth();
   }, []);
 
-  return <>{userId ? <Tasks /> : <Login></Login>}</>;
+  return (
+    <>
+      {userId ? <Tasks /> : <Login></Login>}{" "}
+      <div className="footer">
+        <div className="footer-content"></div>
+        Stay organized and conquer your tasks with GetItDone – your ultimate
+        productivity partner!
+      </div>
+    </>
+  );
 };

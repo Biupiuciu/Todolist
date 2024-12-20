@@ -17,19 +17,17 @@ return async(req:NextApiRequest,res:NextApiResponse)=>{
         }
         const accessTokenKey =process.env.ACCESS_TOKEN_PRIVATE_KEY;
         if (!accessTokenKey) {
-          throw new Error(
-            "ACCESS_TOKEN_PRIVATE_KEY environment variable is not set.",
-          );
+          return res.status(401).json({ message: "environment variable is not set" });
         }
   
         jwt.verify(token, accessTokenKey, (err, decoded) => {
           if (err) {
             if (err instanceof jwt.TokenExpiredError) {
-              console.error("Token has expired");
+              return res.status(401).json({ message: "Token has expired" });
             } else if (err instanceof jwt.JsonWebTokenError) {
-              console.error("Invalid token:", err.message);
+              return res.status(401).json({ message: "Invalid token" });
             } else {
-              console.error("Token verification failed:", err);
+              return res.status(401).json({ message: "Token verification failed" });
             }
           }
           if(!decoded) throw new Error("decoded failed");
@@ -58,11 +56,11 @@ const handler: NextApiHandler = async (req, res) => {
       const { id } = req.query;
       console.log(req.body);
       const {todoList,addNewTask}=req.body;
-      console.log('？？ ',JSON.stringify(todoList));
+      const formatedList=JSON.stringify(todoList);
      
       const queryRequest = addNewTask
-      ? `UPDATE users SET taskNum=taskNum+1,tasks ='${JSON.stringify(todoList)} ' WHERE id = '${id}'`
-      : `UPDATE users SET tasks ='${todoList} ' WHERE id = '${id}'`;
+      ? `UPDATE users SET taskNum=taskNum+1,tasks ='${formatedList} ' WHERE id = '${id}'`
+      : `UPDATE users SET tasks ='${formatedList} ' WHERE id = '${id}'`;
     const result = await pool.query(queryRequest);
 
     if(result.rowCount!=1){

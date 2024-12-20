@@ -1,18 +1,77 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: monospace;
+  font-family: 'Open Sans', sans-serif;
+  color:#131111;
+  
 }
+
+
 
 .background {
   width: 100vw;
   height: 100vh;
   padding: 50px;
-  background: linear-gradient(to bottom right, #acb6e5, #bef3e9);
+  background: #F0F0F0;
   color: #1a1b1d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
+.homepage{
+  width: 100vw; 
+  height: 100vh;
+background: #F0F0F0;
+  color: #1a1b1d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.button-login{
+  
+  width: 270px;
+  height: 50px;
+  border: 1px #131111 solid;
+  text-align: center;
+  line-height: 50px;
+  background-color: #fff;
+}
+
+.button-login:hover{
+background-color:#94FFEA ;
+}
+
+input{
+ 
+  all: unset;
+  width: 250px;
+  height: 30px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px #131111 solid;
+}
+
+input:-webkit-autofill {
+  background-color:#ffffff !important; /* Remove background color */
+  border: 1px solid #131111 !important;  /* Restore border on focus */
+}
+
+input:-webkit-autofill:focus {
+  background-color: #ffffff !important;
+  border: 1px solid #131111 !important;  /* Restore border on focus */
+}
+
+input:focus {
+
+  box-shadow: none; /* Removes any box shadow */
+}
+
+
 .kanban {
-  width: 70%;
+  width: 90%;
   margin: auto;
   margin-top: 3%;
 }
@@ -24,26 +83,183 @@ p {
   word-wrap: break-word;
 }
 
+.textOnHover{
+  padding-top: 5px;
+  display: flex;
+  align-self: center;
+  transition: font-size 0.3s ease;
+}
+.textOnHover:hover{
+font-weight: 800;
+font-size: 20px;
+}
 .kanbanTitle {
+
   display: flex;
   align-items: center;
   margin-bottom: 2%;
   padding-bottom: 2%;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #131111;
 }
 
 h2 {
   font-size: xx-large;
 }
 
+.footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #94FFEA; 
+  text-align: right;
+  padding: 32px;
+  font-size: small;
+ 
+}
+.footer-content{
+  width: 90%;
+}
+
 .kanbanTitleIcon {
   padding-top: 5px;
-  margin-left: 5px;
+  margin-left: 8px;
 }
+
+
 .kanbanLeft {
   flex-grow: 1;
   display: flex;
+  align-items: center;
   gap: 5px;
+}
+
+.logo-container {
+  position: relative;
+  width: 70%;
+  min-width: 350px;
+}
+
+.logo-shadow {
+  position: absolute;
+  top:80px; /* Adjust the shadow offset */
+  left: 20px; /* Adjust the shadow offset */
+  background-color: #94FFEA; /* Shadow color */
+  width: 100%;
+  aspect-ratio: 1;
+  // height: 100%;
+  z-index: 0;
+}
+
+
+.flip_wrap{
+  display:inline-block;
+  // width:300px;
+  // height:220px;
+  width:100%;
+  aspect-ratio: 1;
+  z-index: 1;
+  margin: 50px;
+  perspective:800px;
+  box-sizing:border-box;
+}
+.flip{
+  width: 100%;
+  height:100%;
+  backface-visibility:hidden;
+  transition: all 1s ease;
+  transform-style:preserve-3d;
+}
+.side{
+  width:100%;
+  height: 100%;
+  position:absolute;
+  left:0;
+  top:0;
+/*   color: #fff; */
+  text-align:ceter;
+}
+.front{
+  backface-visibility:hidden;
+  border: 1px solid #000000;
+  font-size: 18px;
+  background:rgb(255, 255, 255);
+}
+.back{
+  border: 1px solid #000000;
+  backface-visibility:hidden;
+  transform: rotateY(180deg);
+  background:rgb(255, 255, 255);
+  padding: 0 36px;
+  box-sizing:border-box;
+}
+
+
+.flip_wrap:hover .flip{
+  transform : rotateY(180deg);
+  
+}
+
+.kanban-container {
+  margin-left: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.kanban-shadow {
+  position: absolute;
+  top: 8px; /* Adjust the shadow offset */
+  left: -8px; /* Adjust the shadow offset */
+  background-color: #94FFEA; /* Shadow color */
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.kanban-title {
+  position: relative;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: white; /* Main background */
+  padding: 10px 20px;
+  border: 1px solid black; /* Border for the main box */
+  z-index: 1; /* Ensure this appears above the shadow */
+}
+
+.logo-text1{
+  position: absolute;
+  bottom: 20px;
+  left:20px;
+  font-size: x-large;
+  color: #131111;
+  text-decoration: underline;
+}
+
+
+
+.logo-text2{
+  position: absolute;
+  top: 20px;
+  right:20px;
+  font-size: 70px;
+  font-weight: 700;
+  line-height: 70px;
+  color:#131111
+}
+.font-color{
+  color: #94FFEA;
+}
+
+.kanban-text{
+  width: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: white; /* Main background */
+  padding: 10px 20px;
+  border: 1px solid black; /* Border for the main box */
+  z-index: 1; /* Ensure this appears above the shadow */
 }
 
 .tableContainer {
@@ -51,31 +267,33 @@ h2 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4%;
 }
-.LoginOrSignup {
-  margin: auto;
-  justify-content: center;
-}
-.logincontainerRight {
-  width: 100%;
-}
+
+
 
 .switchLoginOrSignup {
-  margin-top: 30px;
+  transition: font-weight 0.3s ease; 
   display: grid;
   justify-items: center;
-  width: 80%;
-
   font-size: small;
   font-weight: 500;
   color: #8f9297fe;
 }
 
 .switchLoginOrSignup:hover {
-  color: #3b83f6fe;
-  font-weight: 700;
+  color: #131111;
+  text-decoration: underline; 
 }
-.button-width {
-  width: 80%;
+.logo{
+  position: absolute;
+  top:40px;
+  left:40px;
+  width: 100px; /* Set width */
+  height: auto; /* Maintain aspect ratio */
+  transition: transform 0.3s ease; 
+}
+
+.logo:hover{
+  transform: scale(1.05);
 }
 /* CSS */
 .button-4 {
@@ -147,18 +365,19 @@ h2 {
 }
 .item {
   max-width: 100%;
-  background-color: rgba(255, 255, 255);
-  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
+  border: #131111 1px solid;
   margin-top: 5%;
   cursor: grab;
-  padding: 20px;
+  padding: 15px;
 }
 
 .item-hover:hover {
-  background-color: rgba(234, 245, 254, 0.886);
+  background-color: #F3FFFD;
+  transform: scale(1.01);
 }
 .item-focus {
-  box-shadow: inset 0 0 0 1.5px rgb(60, 167, 255);
+  box-shadow: inset 0 0 0 1.5px #94FFEA;
   padding-left: 7px;
 }
 
@@ -170,56 +389,41 @@ h2 {
 [contenteditable] {
   outline: 0px solid transparent;
 }
-.login {
-  align-content: center;
-  height: 100%;
-}
-.logincontainer {
-  background-color: #ffffff;
-  border-radius: 50px;
-  padding: 5%;
-  width: 80%;
-  height: 80%;
-  margin: auto;
-  align-content: center;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.logincontainerRight {
-  align-content: center;
-  padding: 20px;
+
+.home-container{
+  position: relative;
+  
+  min-width: 250px;
+  background: #000;
 }
 
-input {
-  width: 80%;
-  margin: auto;
-  font-family: monospace;
-  outline: none;
-  border: 1px solid #dadada;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f3f7fe;
-  transition: 0.3s;
-  color: #3b82f6;
-  margin-bottom: 15px;
+.text-center{
+  margin-top: 50px;
+  text-align: center;
+  font-size: small;
 }
 
-input:focus {
-  border: 1px solid #3b82f6;
-  box-shadow: 0 0 0 4px #3b83f65f;
+
+.center-content{
+  display: flex;
+  flex-direction: column; 
+  gap: 20px; 
+  justify-items: center;
+  align-items: center;
 }
+
+
 
 .logincontainerTitle {
   font-size: xx-large;
-  margin-bottom: 20px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .contextmunu {
   position: absolute;
   background-color: white;
   list-style: none;
-  padding: 12px;
+  padding: 15px;
   border-radius: 6px;
   box-shadow: 0px 2px 10px rgba(0, 0, 10, 0.083);
   z-index: 1000;

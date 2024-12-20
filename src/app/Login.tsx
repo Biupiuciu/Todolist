@@ -1,11 +1,9 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import Image from "next/image";
-import { Button } from "../components/Button";
 import { UserAPI } from "../stores/users";
-import taskImg from "../asset/Task management system for productivity.png";
-
+import logo from "../asset/logo.png";
+import Link from "next/link";
 export const Login = () => {
   const [userName, setUserName] = useState("");
   const [pwd, setPwd] = useState("");
@@ -21,22 +19,6 @@ export const Login = () => {
     } catch (err) {
       console.log(err);
     }
-    // const path = isForLogin ? "/api/login" : "/api/signup";
-    // try {
-    //   const response = await axios.post(path, {
-    //     username: userName,
-    //     psd: psd,
-    //   });
-    //   console.log(response.data);
-    //   const { accessToken, id } = response.data;
-    //   setUserId(id);
-    //   localStorage.setItem("accessToken", JSON.stringify(accessToken));
-    // } catch (err: any) {
-    //   console.log("catched:", err, "?");
-    //   if (err.response.data == "Username Duplicate") {
-    //     console.log("duplicate");
-    //   }
-    // }
   };
   const handleUsernameChanged = (e: any) => {
     setUserName(e.currentTarget.value);
@@ -46,50 +28,43 @@ export const Login = () => {
   };
   return (
     <div className="background">
-      <div className="login">
-        <div className="logincontainer">
-          <div className="logincontainerLeft">
-            <Image src={taskImg} alt="" />
-          </div>
-          <div className="logincontainerRight">
-            <div className="logincontainerTitle">
-              {isForLogin ? "Login your account" : "Create your account"}
-            </div>
-            <div>
-              <input
-                placeholder="Username"
-                type="text"
-                value={userName}
-                onChange={handleUsernameChanged}
-              />
-            </div>
-            <div>
-              <input
-                placeholder="Password"
-                type="password"
-                value={pwd}
-                onChange={handlePwdChanged}
-              />
-            </div>
-            <div className="LoginOrSignup">
-              <Button
-                value={isForLogin ? "Login" : "Signup"}
-                clickHandler={handleClick}
-                classname="button-width"
-              />
+      <Link
+        href="/home
+      "
+      >
+        <img src={logo.src} className="logo" />
+      </Link>
 
-              <div
-                className="switchLoginOrSignup"
-                onClick={() => {
-                  setIsForLogin(!isForLogin);
-                }}
-              >
-                <div>
-                  {isForLogin ? "Don't have an account?" : "Have an account?"}
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="center-content">
+        <div className="logincontainerTitle">
+          {isForLogin ? "Login your account" : "Create your account"}{" "}
+        </div>
+
+        <input
+          className="input"
+          placeholder="Username"
+          type="text"
+          value={userName}
+          onChange={handleUsernameChanged}
+        />
+
+        <input
+          className="input"
+          placeholder="Password"
+          type="password"
+          value={pwd}
+          onChange={handlePwdChanged}
+        />
+        <div className="button-login" onClick={handleClick}>
+          {isForLogin ? "Login" : "Signup"}
+        </div>
+        <div
+          className="switchLoginOrSignup"
+          onClick={() => {
+            setIsForLogin(!isForLogin);
+          }}
+        >
+          {isForLogin ? "Don't have an account?" : "Have an account?"}
         </div>
       </div>
     </div>

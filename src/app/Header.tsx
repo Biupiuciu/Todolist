@@ -1,6 +1,6 @@
 import { MyContext } from "./MyContext";
 import React, { useRef, useContext, useEffect } from "react";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ListAPI } from "@/stores/lists";
 import { Button } from "../components/Button";
 import { UserAPI, userStore } from "@/stores/users";
@@ -55,13 +55,28 @@ export const Header = () => {
   return (
     <div className="kanbanTitle">
       <div className="kanbanLeft">
-        <h2>Kanban Board</h2>
+        <div className="kanban-container">
+          <div className="kanban-shadow"></div>
+          <div className="kanban-title">Kanban Board</div>
+        </div>
+
         <div className="kanbanTitleIcon" onClick={handleAddTask}>
-          <ControlPointIcon></ControlPointIcon>
+          <AddCircleIcon
+            fontSize="large"
+            sx={{
+              color: "#131111",
+              "&:hover": {
+                color: "#47FFDA",
+                transition: "transform 0.3s ease, color 0.3s ease", // Smooth transition
+              },
+            }}
+          ></AddCircleIcon>
         </div>
       </div>
-
-      <Button value="Log out " clickHandler={handleLogOut} />
+      <div onClick={handleLogOut} className="textOnHover">
+        Log out &gt;&gt;
+      </div>
+      {/* <Button value="Log out " clickHandler={handleLogOut} /> */}
     </div>
   );
 };
