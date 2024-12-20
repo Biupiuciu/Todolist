@@ -2,7 +2,6 @@ import { MyContext } from "./MyContext";
 import React, { useRef, useContext, useEffect } from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ListAPI } from "@/stores/lists";
-import { Button } from "../components/Button";
 import { UserAPI, userStore } from "@/stores/users";
 import { listStore } from "@/stores/lists";
 export const Header = () => {
