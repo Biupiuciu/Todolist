@@ -4,7 +4,7 @@ A full-stack to-do list web application built to help users organize and manage 
 
 ## Setup
 
-So far, only prereq is a ().
+So far, only prereq is a "npm install"
 
 ## Technologies
 
