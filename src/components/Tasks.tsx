@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Droppable } from "./Droppable";
-import { arrayMove, insertAtIndex, removeAtIndex } from "./array";
+import { arrayMove, insertAtIndex, removeAtIndex } from "../utils/array";
 import {
   DndContext,
   PointerSensor,

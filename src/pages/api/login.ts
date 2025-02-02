@@ -1,5 +1,5 @@
 
-import {pool} from "../../../database";
+import {pool} from "../../lib/database";
 import { UserAPI } from "@/stores/users";
 import type { NextApiHandler } from "next";
 import bcrypt from "bcrypt";

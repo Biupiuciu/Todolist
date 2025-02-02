@@ -1,7 +1,7 @@
 
 import type { NextApiHandler } from "next";
 import bcrypt from "bcrypt";
-import {pool} from "../../../database";
+import {pool} from "../../lib/database";
 import { UserAPI } from "@/stores/users";
 const signup: NextApiHandler = async (req, res) => {
   const { username, psd } = req.body;

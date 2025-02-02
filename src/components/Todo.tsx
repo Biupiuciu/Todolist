@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect } from "react";
-import { MyContext } from "./MyContext";
+import { MyContext } from "../context/MyContext";
 import { Login } from "./Login";
 import { Tasks } from "./Tasks";
 import { UserAPI } from "../stores/users";

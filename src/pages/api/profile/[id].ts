@@ -1,4 +1,4 @@
-import { pool } from "../../../../database";
+import { pool } from "../../../lib/database";
 import type { NextApiHandler, NextApiRequest, NextApiResponse  } from "next";
 import jwt from "jsonwebtoken";
 import type {Decoded} from "../profile/index";

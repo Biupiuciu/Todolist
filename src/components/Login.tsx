@@ -28,10 +28,7 @@ export const Login = () => {
   };
   return (
     <div className="background">
-      <Link
-        href="/home
-      "
-      >
+      <Link href="/ ">
         <img src={logo.src} className="logo" />
       </Link>
 

@@ -1,14 +1,15 @@
 import React from "react";
-import "./app.scss";
 import Link from "next/link";
-export const Home = () => {
+import "../app/app.scss";
+
+export default function index() {
   return (
     <div className="homepage">
       <div className="center-content">
         <div className="logo-container">
           <div className="logo-shadow"></div>
 
-          <Link href="/">
+          <Link href="/todo">
             <div className="flip_wrap ">
               <div className="flip">
                 <div className="side front">
@@ -31,4 +32,4 @@ export const Home = () => {
       </div>
     </div>
   );
-};
+}

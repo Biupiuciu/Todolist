@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext, LegacyRef, createRef, useEffect } from "react";
-import { MyContext } from "./MyContext";
+import { MyContext } from "../context/MyContext";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { listStore, type Task } from "../stores/lists";
@@ -130,7 +130,6 @@ export const TaskItem = (props: ItemContent) => {
         suppressContentEditableWarning={true}
         contentEditable={taskId == editId && isEditting}
         onKeyDown={FinishEditting}
-        // onDoubleClick={MakeItEditable}
         onBlur={(e) => {
           const updatedtask = e.currentTarget.textContent;
           updateList(updatedtask);

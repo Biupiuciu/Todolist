@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 // import { runMiddleware, profileMiddleware } from "./[id]";
 import type { NextApiHandler } from "next";
-import {pool} from '../../../../database';
+import {pool} from '../../../lib/database';
 const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
 export interface Decoded {
   _id?:  number;

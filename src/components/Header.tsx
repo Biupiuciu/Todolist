@@ -1,4 +1,4 @@
-import { MyContext } from "./MyContext";
+import { MyContext } from "../context/MyContext";
 import React, { useRef, useContext, useEffect } from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ListAPI } from "@/stores/lists";
@@ -75,7 +75,6 @@ export const Header = () => {
       <div onClick={handleLogOut} className="textOnHover">
         Log out &gt;&gt;
       </div>
-      {/* <Button value="Log out " clickHandler={handleLogOut} /> */}
     </div>
   );
 };

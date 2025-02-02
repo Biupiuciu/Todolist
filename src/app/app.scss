@@ -11,7 +11,7 @@ body {
 .background {
   width: 100vw;
   height: 100vh;
-  padding: 50px;
+  // padding: 50px;
   background: #F0F0F0;
   color: #1a1b1d;
   display: flex;
@@ -22,7 +22,7 @@ body {
 .homepage{
   width: 100vw; 
   height: 100vh;
-background: #F0F0F0;
+  background: #F0F0F0;
   color: #1a1b1d;
   display: flex;
   justify-content: center;
@@ -115,10 +115,7 @@ h2 {
   text-align: right;
   padding: 32px;
   font-size: small;
- 
-}
-.footer-content{
-  width: 90%;
+  box-sizing: border-box;
 }
 
 .kanbanTitleIcon {
