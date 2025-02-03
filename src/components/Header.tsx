@@ -44,7 +44,6 @@ export const Header = () => {
     ListAPI.UpdateTasksDB({ todoList: newList, addNewTask: true }, userId);
     setTaskNum(taskNum + 1);
     setFirstTimeFocused(true);
-
     setLists(newList);
   };
 
