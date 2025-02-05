@@ -4,26 +4,44 @@ import { useState } from "react";
 import { UserAPI } from "../stores/users";
 import logo from "../asset/logo.png";
 import Link from "next/link";
+import { isValidEmail, isValidPassword } from "../utils/validation";
 export const Login = () => {
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [isForLogin, setIsForLogin] = useState(true);
-
+  const [isEmailValidated, setIsEmailValidated] = useState(false);
+  const [isPasswordValidated, setIsPasswordValidated] = useState(false);
+  const [emailWarning, setEmailWarning] = useState(false);
+  const [passwordWarning, setPasswordWarning] = useState(false);
   const handleClick = async () => {
+    if (!isEmailValidated || !isPasswordValidated) {
+      console.log(pwd);
+      console.log(!isValidPassword(pwd));
+      setEmailWarning(!isValidEmail(email));
+      setPasswordWarning(!isValidPassword(pwd));
+      return;
+    }
     try {
       if (isForLogin) {
-        await UserAPI.logIn(userName, pwd);
+        await UserAPI.logIn(email, pwd);
       } else {
-        await UserAPI.signUp(userName, pwd);
+        await UserAPI.signUp(email, pwd);
       }
     } catch (err) {
       console.log(err);
     }
   };
-  const handleUsernameChanged = (e: any) => {
-    setUserName(e.currentTarget.value);
+  const handleEmailChanged = (e: any) => {
+    setIsEmailValidated(isValidEmail(e.currentTarget.value));
+    setEmailWarning(!isValidEmail(e.currentTarget.value));
+    console.log(!isValidEmail(e.currentTarget.value));
+    setEmail(e.currentTarget.value);
   };
   const handlePwdChanged = (e: any) => {
+    setIsPasswordValidated(isValidPassword(e.currentTarget.value));
+    setPasswordWarning(!isValidPassword(e.currentTarget.value));
+    console.log(e.currentTarget.value);
+    console.log(!isValidPassword(e.currentTarget.value));
     setPwd(e.currentTarget.value);
   };
   return (
@@ -38,23 +56,28 @@ export const Login = () => {
         </div>
 
         <input
-          className="input"
-          placeholder="Username"
+          className={`input ${emailWarning && "input-warning"}`}
+          placeholder="Email"
           type="text"
-          value={userName}
-          onChange={handleUsernameChanged}
+          value={email}
+          onChange={handleEmailChanged}
         />
 
         <input
-          className="input"
+          className={`input ${passwordWarning && "input-warning"}`}
           placeholder="Password"
           type="password"
           value={pwd}
           onChange={handlePwdChanged}
         />
-        <div className="button-login" onClick={handleClick}>
+        <button
+          className={`button-login ${
+            isEmailValidated && isPasswordValidated && "button-clickable"
+          }`}
+          onClick={handleClick}
+        >
           {isForLogin ? "Login" : "Signup"}
-        </div>
+        </button>
         <div
           className="switchLoginOrSignup"
           onClick={() => {
