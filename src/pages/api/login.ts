@@ -1,34 +1,36 @@
-
-import {pool} from "../../lib/database";
-import { UserAPI } from "@/stores/users";
 import type { NextApiHandler } from "next";
-import bcrypt from "bcrypt";
+import userPool from "@/lib/cognito";
+import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
+import { HttpStatus } from "@/utils/httpStatus";
+import { cookies } from "next/headers";
 const login: NextApiHandler = async (req, res) => {
-  const { username, psd } = req.body;
-  try {
+  const { email, psd } = req.body;
+  const authenticationDetails = new AuthenticationDetails({
+    Username: email,
+    Password: psd,
+  });
 
-    const { rows } = await pool.query(
-      `SELECT id, pwd FROM users WHERE username = '${username}'`,
-    );
-    if (rows.length!=1) {
-      throw new Error("Can't find user");
-    }
+  var cognitoUser = new CognitoUser({
+    Username: email,
+    Pool: userPool,
+  });
 
+  cognitoUser.authenticateUser(authenticationDetails, {
+    onSuccess: (session) => {
+      const refreshToken = session.getRefreshToken().getToken();
+      res.setHeader(
+        "Set-Cookie",
+        `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000`
+      ); // 30 days
 
-    const isMatch = await bcrypt.compare(psd,rows[0].pwd);
-
-    if(!isMatch){
-      throw new Error("unMatched");
-    }
-    const accessToken = await UserAPI.generateAccessToken(rows[0].id);
-
-    res
-      .status(201)
-      .json({ accessToken });
-
-  } catch (err) {
-    console.log(err);
-  }
+      return res
+        .status(HttpStatus.OK)
+        .json({ message: "Log in successfully.", username: email });
+    },
+    onFailure: (err) => {
+      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+    },
+  });
 };
 
 export default login;

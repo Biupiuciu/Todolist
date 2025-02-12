@@ -10,21 +10,24 @@ import {
 
 import { Header } from "./Header";
 import { ListAPI, Task } from "@/stores/lists";
+import { UserAPI } from "@/stores/users";
 import { userStore } from "@/stores/users";
 import { listStore } from "@/stores/lists";
 export type ListType = "todo" | "inpro" | "done";
 
 export const Tasks = () => {
   const user = userStore((state) => state.user);
-  const userId = user.id as number;
+  const username = user.username;
   const lists = listStore((state) => state.lists);
   const { setLists } = listStore.getState();
   const listTypes = ["todo", "inpro", "done"];
 
   const sensors = useSensors(useSensor(PointerSensor));
-
+  const generateAccessToken = async () => {
+    const token = await UserAPI.generateAccessToken();
+  };
   useEffect(() => {
-    ListAPI.getTasks(userId);
+    ListAPI.getTasks(username ?? ""); //what if it's undefined
   }, []);
 
   const moveBetweenContainers = (
@@ -109,7 +112,7 @@ export const Tasks = () => {
         }
         return { ...list };
       });
-      ListAPI.UpdateTasksDB({ todoList: newList }, userId);
+      ListAPI.UpdateTasksDB({ todoList: newList }, username);
       setLists(newList);
     }
   };

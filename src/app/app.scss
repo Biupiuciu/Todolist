@@ -279,7 +279,7 @@ h2 {
 
 
 
-.switchLoginOrSignup {
+.link{
   transition: font-weight 0.3s ease; 
   display: grid;
   justify-items: center;
@@ -288,7 +288,7 @@ h2 {
   color: #8f9297fe;
 }
 
-.switchLoginOrSignup:hover {
+.link:hover {
   color: #131111;
   text-decoration: underline; 
 }

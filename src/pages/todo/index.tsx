@@ -8,7 +8,7 @@ import { UserAPI } from "../../stores/users";
 import { userStore } from "../../stores/users";
 
 const Todo = () => {
-  const userId = userStore((state) => state.user.id);
+  const username = userStore((state) => state.user.username);
 
   const { showMenu, setShowMenu } = useContext(MyContext);
 
@@ -41,7 +41,7 @@ const Todo = () => {
 
   return (
     <>
-      {userId ? <Tasks /> : <Login></Login>}{" "}
+      {username ? <Tasks /> : <Login></Login>}{" "}
       <div className="footer">
         Stay organized and conquer your tasks with GetItDone – your ultimate
         productivity partner!
