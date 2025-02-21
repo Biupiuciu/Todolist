@@ -1,65 +1,61 @@
-import jwt from "jsonwebtoken";
-// import { runMiddleware, profileMiddleware } from "./[id]";
 import type { NextApiHandler } from "next";
-import {pool} from '../../../lib/database';
-const accessTokenKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
-export interface Decoded {
-  _id?:  number;
-  // Add other fields that you expect in the decoded payload
-}
+import userPool from "@/lib/cognito";
+import getUserId from "@/lib/repositories/userRepo";
+import { HttpStatus } from "@/utils/httpStatus";
+import {
+  CognitoRefreshToken,
+  CognitoUserSession,
+} from "amazon-cognito-identity-js";
+
 const handler: NextApiHandler = async (req, res) => {
-  // await runMiddleware(req, res, profileMiddleware);
-  // const { id } = req.body;
-  // if (id) {
-  //   res.status(200).json({ id: id });
-  // }
-
-  let id:number|undefined;
-    if (req.method == "GET") {
-      const authHeader = req.headers["authorization"];
-      const token = authHeader && authHeader.split(" ")[1].replace(/^"|"$/g, "");
-
-      if (!token) {
-        return res.status(401).json({ message: "No token provided" });
+  const cognitoUser = userPool.getCurrentUser();
+  if (cognitoUser) {
+    cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
+      if (err) {
+        console.log("error1");
+        return res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: err.message });
       }
-
-      if (!accessTokenKey) {
-        throw new Error(
-          "ACCESS_TOKEN_PRIVATE_KEY environment variable is not set.",
-        );
-      }
-
-      jwt.verify(token, accessTokenKey, (err, decoded) => {
-        if (err) {
-          if (err instanceof jwt.TokenExpiredError) {
-            console.error("Token has expired");
-          } else if (err instanceof jwt.JsonWebTokenError) {
-            console.error("Invalid token:", err.message);
-          } else {
-            console.error("Token verification failed:", err);
-          }
-        }
-        if(!decoded) throw new Error("decoded failed");
-
-        console.log("DECODED:", decoded);
-        const {_id}=decoded as Decoded;
-        id=_id;
-       
+      const refreshToken = session.getRefreshToken().getToken();
+      const refreshTokenObj = new CognitoRefreshToken({
+        RefreshToken: refreshToken,
       });
 
+      cognitoUser.refreshSession(refreshTokenObj, async (err, newSession) => {
+        if (err) {
+          console.log("error2");
+          return res
+            .status(HttpStatus.BAD_REQUEST)
+            .json({ message: err.message });
+        }
 
-      const { rows } = await pool.query(
-        `SELECT username FROM users WHERE id = '${id}'`,
-      );
-      if (rows.length!=1) {
-        throw new Error("Can't find tasks");
-      }
-      
-      return res.json({id:id,username:rows[0].username});
+        const refreshToken = newSession.getRefreshToken().getToken();
+        res.setHeader(
+          "Set-Cookie",
+          `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000`
+        ); // 30 days
 
-     
-    }
- 
+        const username = newSession.getIdToken().payload.email;
+
+        const id = await getUserId(username);
+
+        if (!id) {
+          console.log("error3");
+          return res
+            .status(HttpStatus.BAD_REQUEST)
+            .json({ message: "Internal Error" });
+        }
+
+        return res.status(HttpStatus.OK).json({ username: username, id: id });
+      });
+    });
+  } else {
+    console.log("error4!");
+    return res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: "Internal Error" });
+  }
 };
 
 export default handler;

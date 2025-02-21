@@ -37,7 +37,6 @@ export const TaskItem = (props: ItemContent) => {
 
   useEffect(() => {
     if (pElementRef?.current && taskId == editId && isEditting) {
-      console.log("pELE:", pElementRef.current);
       pElementRef?.current.focus();
     }
   }, [editId, isEditting]);

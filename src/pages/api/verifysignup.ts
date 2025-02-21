@@ -16,7 +16,6 @@ const verifysignup: NextApiHandler = async (req, res) => {
       console.log("! ", err.message);
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
     }
-    console.log(result);
 
     const dbResult =
       await pool.query(`INSERT INTO users (username,  tasks,taskNum) 
@@ -24,7 +23,6 @@ const verifysignup: NextApiHandler = async (req, res) => {
 
     const { rowCount } = dbResult;
 
-    console.log(rowCount);
     if (rowCount != 1 || !dbResult) {
       return res
         .status(HttpStatus.BAD_REQUEST)

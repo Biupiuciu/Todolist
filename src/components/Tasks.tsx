@@ -17,17 +17,19 @@ export type ListType = "todo" | "inpro" | "done";
 
 export const Tasks = () => {
   const user = userStore((state) => state.user);
-  const username = user.username;
+  const { id } = user;
   const lists = listStore((state) => state.lists);
   const { setLists } = listStore.getState();
   const listTypes = ["todo", "inpro", "done"];
 
   const sensors = useSensors(useSensor(PointerSensor));
-  const generateAccessToken = async () => {
-    const token = await UserAPI.generateAccessToken();
+  const init = async () => {
+    await UserAPI.getAuth();
+
+    await ListAPI.getTasks(id as number);
   };
   useEffect(() => {
-    ListAPI.getTasks(username ?? ""); //what if it's undefined
+    init();
   }, []);
 
   const moveBetweenContainers = (
@@ -82,7 +84,7 @@ export const Tasks = () => {
         overIndex,
         task
       );
-      ListAPI.UpdateTasksDB({ todoList: newLists }, userId);
+      ListAPI.UpdateTasksDB({ todoList: newLists }, id as number);
       setLists(newLists);
     }
   };
@@ -112,7 +114,7 @@ export const Tasks = () => {
         }
         return { ...list };
       });
-      ListAPI.UpdateTasksDB({ todoList: newList }, username);
+      ListAPI.UpdateTasksDB({ todoList: newList }, id as number);
       setLists(newList);
     }
   };

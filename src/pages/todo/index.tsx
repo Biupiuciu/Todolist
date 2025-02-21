@@ -34,6 +34,7 @@ const Todo = () => {
 
   useEffect(() => {
     const testAuth = async () => {
+      console.log("/todo, call getAuth()...");
       await UserAPI.getAuth();
     };
     testAuth();

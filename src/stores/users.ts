@@ -1,10 +1,8 @@
 import { create } from "zustand";
 import { listStore } from "./lists";
-import jwt from "jsonwebtoken";
 import { message } from "antd";
 import { HttpStatus } from "@/utils/httpStatus";
-import { Result } from "postcss";
-
+import { cookies } from "next/headers";
 export interface User {
   id?: number;
   username?: string;
@@ -24,6 +22,7 @@ export const userStore = create<{
 
 export class UserAPI {
   static async generateAccessToken() {
+    console.log("calling....");
     const response = await fetch("api/refresh-token", {
       method: "POST",
       headers: {
@@ -44,23 +43,19 @@ export class UserAPI {
   }
 
   static async getAuth() {
-    // const token = localStorage.getItem("accessToken");
-    // try {
-    //   if (!token) {
-    //     throw new Error("No token stored in LocalStorage");
-    //   }
-    //   const res = await fetch("/api/profile", {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   const {id,username} = await res.json();
-    //   const { setUser } = userStore.getState();
-    //   setUser({id:id,username:username});
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      console.log("call getAuth,");
+      const res = await fetch("/api/profile", {
+        method: "GET",
+      });
+      const { id, username } = await res.json();
+      console.log("after run /profile,", id, username);
+      const { setUser } = userStore.getState();
+      setUser({ id: id, username: username });
+    } catch (err) {
+      console.log(err);
+      UserAPI.logOut();
+    }
   }
 
   static async signUp(email: string, pwd: string) {
@@ -100,18 +95,13 @@ export class UserAPI {
 
     if (res.status == HttpStatus.OK) {
       message.success(result.message);
+      console.log("after login,", result.username); //debug
       userStore.getState().setUser({ username: email });
     } else {
       message.error(result.message);
     }
-    // const data=await res.json();
-    // console.log("LOGINDATA:",data);
-
-    // const { accessToken} = data;
-
-    // localStorage.setItem("accessToken", JSON.stringify(accessToken.value));
-    // this.getAuth();
   }
+
   static async verifySignUp(code: string, email: string, pwd: string) {
     const res = await fetch("/api/verifysignup", {
       method: "POST",
@@ -153,10 +143,10 @@ export class UserAPI {
       message.error(result.message);
     }
   }
-  static logOut() {
+  static async logOut() {
     userStore.getState().logOutUser();
     listStore.getState().resetLists();
 
-    localStorage.removeItem("accessToken");
+    await fetch("/api/logout", { method: "POST" });
   }
 }

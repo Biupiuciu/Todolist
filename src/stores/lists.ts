@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { UserAPI } from "./users";
+import { TokenGenerationError } from "@/utils/error";
+import { HttpStatus } from "@/utils/httpStatus";
 type ListTitle = "To do" | "In progress" | "Done";
 export interface Task {
   id: number;
@@ -32,11 +34,9 @@ export const listStore = create<{
 
 export class ListAPI {
   static async UpdateTasksDB(lists: any, userId: number) {
-    const token = localStorage.getItem("accessToken");
     try {
-      if (!token) {
-        throw new Error("No token stored in LocalStorage");
-      }
+      const token = await UserAPI.generateAccessToken();
+      if (!token) throw new TokenGenerationError();
 
       const { status } = await fetch(`/api/profile/${userId}`, {
         method: "PUT",
@@ -47,22 +47,25 @@ export class ListAPI {
         body: JSON.stringify(lists),
       });
 
-      if (status == 200) {
+      if (status == HttpStatus.OK) {
         console.log("Update Successfully!");
         return;
       }
-      if (status == 401) {
+
+      throw new Error("Failed");
+    } catch (err) {
+      console.log(err);
+      if (err instanceof TokenGenerationError) {
         UserAPI.logOut();
       }
-      throw new Error("Failed");
-    } catch (err) {}
+    }
   }
-  static async getTasks(username: string) {
+  static async getTasks(id: number) {
     try {
       const token = await UserAPI.generateAccessToken();
-      if (!token) throw new Error("Failed to generate access token");
+      if (!token) throw new TokenGenerationError();
 
-      const res = await fetch(`/api/profile/${username}`, {
+      const res = await fetch(`/api/profile/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -81,7 +84,9 @@ export class ListAPI {
       setLists(JSON.parse(validJsonString));
     } catch (err) {
       console.log(err);
-      UserAPI.logOut();
+      if (err instanceof TokenGenerationError) {
+        UserAPI.logOut();
+      }
     }
   }
 }

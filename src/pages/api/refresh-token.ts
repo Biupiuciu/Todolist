@@ -21,15 +21,23 @@ const verifysignup: NextApiHandler = async (req, res) => {
     RefreshToken: refreshToken,
   });
 
-  cognitoUser.refreshSession(refreshTokenObj, (err, session) => {
-    if (err) {
-      return res.status(HttpStatus.UNAUTHORIZED).json({ message: err.message });
-    }
+  try {
+    cognitoUser.refreshSession(refreshTokenObj, (err, session) => {
+      if (err) {
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .json({ message: err.message });
+      }
 
-    const accessToken = session.getAccessToken().getJwtToken();
+      const accessToken = session.getAccessToken().getJwtToken();
 
-    return res.status(HttpStatus.OK).json({ accessToken: accessToken });
-  });
+      return res.status(HttpStatus.OK).json({ accessToken: accessToken });
+    });
+  } catch (err) {
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: "Session expired. Please log in again." });
+  }
 };
 
 export default verifysignup;
