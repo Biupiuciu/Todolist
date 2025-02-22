@@ -4,8 +4,6 @@ import { HttpStatus } from "@/utils/httpStatus";
 
 const logout: NextApiHandler = async (req, res) => {
   const cognitoUser = userPool.getCurrentUser();
-  let status = HttpStatus.OK;
-  let message;
   if (cognitoUser) {
     cognitoUser.signOut();
     res.setHeader(
