@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { listStore } from "./lists";
 import { message } from "antd";
 import { HttpStatus } from "@/utils/httpStatus";
-import { cookies } from "next/headers";
 export interface User {
   id?: number;
   username?: string;

@@ -12,7 +12,7 @@ const verifysignup: NextApiHandler = async (req, res) => {
     return res.status(HttpStatus.UNAUTHORIZED).json("Refresh token is missing");
   }
 
-  var cognitoUser = new CognitoUser({
+  const cognitoUser = new CognitoUser({
     Username: email,
     Pool: userPool,
   });

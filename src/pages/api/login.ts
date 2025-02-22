@@ -11,7 +11,7 @@ const login: NextApiHandler = async (req, res) => {
     Password: psd,
   });
 
-  var cognitoUser = new CognitoUser({
+  const cognitoUser = new CognitoUser({
     Username: email,
     Pool: userPool,
   });

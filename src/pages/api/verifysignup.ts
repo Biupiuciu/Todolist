@@ -6,7 +6,7 @@ import { pool } from "@/lib/database";
 const verifysignup: NextApiHandler = async (req, res) => {
   const { email, code } = req.body;
 
-  var cognitoUser = new CognitoUser({
+  const cognitoUser = new CognitoUser({
     Username: email,
     Pool: userPool,
   });
@@ -17,6 +17,7 @@ const verifysignup: NextApiHandler = async (req, res) => {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
     }
 
+    console.log("Verify:", result);
     const dbResult =
       await pool.query(`INSERT INTO users (username,  tasks,taskNum) 
             VALUES ('${email}', '[{"tasks": [ {"id": "0", "content": "Task1"}], "title": "To do"}, {"tasks": [], "title": "In progress"}, {"tasks": [], "title": "Done"}]',1) RETURNING id;;`);
