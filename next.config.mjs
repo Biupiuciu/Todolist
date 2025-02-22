@@ -10,5 +10,15 @@ const nextConfig = {
       return config;
     },
   };
-  
+// const nextConfig = {
+//   webpack: (config) => {
+//     config.module.rules.push({
+//       test: /\.m?js/,
+//       resolve: {
+//         fullySpecified: false, // Prevents Webpack from interpreting modules as ESM
+//       },
+//     });
+//     return config;
+//   },
+// };
   export default nextConfig;
