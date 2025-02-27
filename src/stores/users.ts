@@ -47,7 +47,9 @@ export class UserAPI {
       const res = await fetch("/api/profile", {
         method: "GET",
       });
-      const { id, username } = await res.json();
+      const result = await res.json();
+      console.log("?", result);
+      const { id, username } = result;
       console.log("after run /profile,", id, username);
       const { setUser } = userStore.getState();
       setUser({ id: id, username: username });
