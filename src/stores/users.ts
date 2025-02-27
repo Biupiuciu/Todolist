@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { listStore } from "./lists";
-import { message } from "antd";
+import { toast } from "sonner";
 import { HttpStatus } from "@/utils/httpStatus";
 export interface User {
   id?: number;
@@ -36,7 +36,7 @@ export class UserAPI {
     if (response.status == HttpStatus.OK) {
       return result.accessToken;
     } else {
-      message.error(result.message);
+      toast.error(result.message);
       return;
     }
   }
@@ -51,6 +51,7 @@ export class UserAPI {
       console.log("after run /profile,", id, username);
       const { setUser } = userStore.getState();
       setUser({ id: id, username: username });
+      return id;
     } catch (err) {
       console.log(err);
       UserAPI.logOut();
@@ -71,10 +72,11 @@ export class UserAPI {
     const result = await res.json();
     console.log("test:", result);
     if (res.status == HttpStatus.CREATED) {
-      message.success(result.message);
+      toast.success(result.message);
+
       return true;
     } else {
-      message.error(result.message);
+      toast.error(result.message);
       return false;
     }
   }
@@ -93,11 +95,11 @@ export class UserAPI {
     const result = await res.json();
 
     if (res.status == HttpStatus.OK) {
-      message.success(result.message);
+      toast.success(result.message);
       console.log("after login,", result.username); //debug
       userStore.getState().setUser({ username: email });
     } else {
-      message.error(result.message);
+      toast.error(result.message);
     }
   }
 
@@ -121,7 +123,7 @@ export class UserAPI {
       //if fail???
     } else {
       //handle db creation fail
-      message.error(result.message);
+      toast.error(result.message);
     }
   }
 
@@ -137,9 +139,9 @@ export class UserAPI {
     });
     const result = await res.json();
     if (res.status == HttpStatus.OK) {
-      message.success(result);
+      toast.success(result);
     } else {
-      message.error(result.message);
+      toast.error(result.message);
     }
   }
   static async logOut() {

@@ -21,10 +21,8 @@ const handler: NextApiHandler = async (req, res) => {
       const refreshTokenObj = new CognitoRefreshToken({
         RefreshToken: refreshToken,
       });
-
       cognitoUser.refreshSession(refreshTokenObj, async (err, newSession) => {
         if (err) {
-          console.log("error2");
           return res
             .status(HttpStatus.BAD_REQUEST)
             .json({ message: err.message });
@@ -37,16 +35,14 @@ const handler: NextApiHandler = async (req, res) => {
         ); // 30 days
 
         const username = newSession.getIdToken().payload.email;
-
         const id = await getUserId(username);
 
         if (!id) {
-          console.log("error3");
           return res
             .status(HttpStatus.BAD_REQUEST)
             .json({ message: "Internal Error" });
         }
-
+        console.log("/profile...", { username: username, id: id });
         return res.status(HttpStatus.OK).json({ username: username, id: id });
       });
     });

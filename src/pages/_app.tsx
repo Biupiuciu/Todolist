@@ -1,6 +1,7 @@
 import React from "react";
 import { AppProps } from "next/app";
 import { MyContext } from "../context/MyContext";
+import { Toaster } from "sonner";
 import "../app/app.scss";
 import { useState } from "react";
 
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <Component {...pageProps} />
+      <Toaster />
     </MyContext.Provider>
   );
 }

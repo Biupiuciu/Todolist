@@ -6,7 +6,7 @@ import logo from "../asset/logo.png";
 import Link from "next/link";
 import { isValidEmail, isValidPassword } from "../utils/validation";
 
-import { message } from "antd";
+import { toast } from "sonner";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,7 +33,7 @@ export const Login = () => {
       }
     } catch (err) {
       console.log(err);
-      message.error("internal error");
+      toast.error("internal error");
     }
   };
   const handleVeriClick = async () => {
@@ -41,7 +41,7 @@ export const Login = () => {
       await UserAPI.verifySignUp(code, email, pwd);
     } catch (err) {
       console.log(err);
-      message.error("internal error");
+      toast.error("internal error");
     }
   };
   const handleEmailChanged = (e: any) => {

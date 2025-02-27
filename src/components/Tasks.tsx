@@ -24,9 +24,8 @@ export const Tasks = () => {
 
   const sensors = useSensors(useSensor(PointerSensor));
   const init = async () => {
-    await UserAPI.getAuth();
-
-    await ListAPI.getTasks(id as number);
+    const result = await UserAPI.getAuth();
+    await ListAPI.getTasks(result);
   };
   useEffect(() => {
     init();
