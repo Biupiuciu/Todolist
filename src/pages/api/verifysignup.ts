@@ -11,7 +11,7 @@ const verifysignup: NextApiHandler = async (req, res) => {
     Pool: userPool,
   });
 
-  cognitoUser.confirmRegistration(code, false, async (err, result) => {
+  cognitoUser.confirmRegistration(code, false, async (err) => {
     if (err) {
       console.log(err.message);
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
