@@ -30,7 +30,6 @@ const verifysignup: NextApiHandler = async (req, res) => {
       }
 
       const accessToken = session.getAccessToken().getJwtToken();
-      console.log("reffresh-token return ", accessToken);
       return res.status(HttpStatus.OK).json({ accessToken: accessToken });
     });
   } catch (err) {

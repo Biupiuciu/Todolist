@@ -5,13 +5,12 @@ import { UserAPI } from "../stores/users";
 import logo from "../asset/logo.png";
 import Link from "next/link";
 import { isValidEmail, isValidPassword } from "../utils/validation";
-
+import { Verification } from "./Verification";
 import { toast } from "sonner";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const [code, setCode] = useState("");
   const [isForLogin, setIsForLogin] = useState(true);
   const [isEmailValidated, setIsEmailValidated] = useState(false);
   const [isPasswordValidated, setIsPasswordValidated] = useState(false);
@@ -26,7 +25,13 @@ export const Login = () => {
     }
     try {
       if (isForLogin) {
-        await UserAPI.logIn(email, pwd);
+        const result = await UserAPI.logIn(email, pwd);
+
+        //account not verified
+        if (result) {
+          await UserAPI.resendCode(email);
+          setStepVerification(result);
+        }
       } else {
         const result = await UserAPI.signUp(email, pwd);
         setStepVerification(result ?? false);
@@ -36,14 +41,7 @@ export const Login = () => {
       toast.error("internal error");
     }
   };
-  const handleVeriClick = async () => {
-    try {
-      await UserAPI.verifySignUp(code, email, pwd);
-    } catch (err) {
-      console.log(err);
-      toast.error("internal error");
-    }
-  };
+
   const handleEmailChanged = (e: any) => {
     setIsEmailValidated(isValidEmail(e.currentTarget.value, isForLogin));
     setEmailWarning(!isValidEmail(e.currentTarget.value, isForLogin));
@@ -54,9 +52,7 @@ export const Login = () => {
     setPasswordWarning(!isValidPassword(e.currentTarget.value, isForLogin));
     setPwd(e.currentTarget.value);
   };
-  const handleCodeChanged = (e: any) => {
-    setCode(e.currentTarget.value);
-  };
+
   return (
     <div className="background">
       <Link href="/ ">
@@ -65,32 +61,7 @@ export const Login = () => {
 
       <div className="center-content">
         {stepVerification ? (
-          <>
-            <div className="logincontainerTitle">
-              Email verification required
-            </div>
-            <input
-              className={`input `}
-              placeholder="6 digit verification code"
-              type="text"
-              value={code}
-              onChange={handleCodeChanged}
-            />
-            <button
-              className={`button-login ${code != "" && "button-clickable"}`}
-              onClick={handleVeriClick}
-            >
-              Signup
-            </button>
-            <div
-              className="link"
-              onClick={() => {
-                UserAPI.resendCode(email);
-              }}
-            >
-              Resend verification code
-            </div>
-          </>
+          <Verification email={email} pwd={pwd} />
         ) : (
           <>
             <div className="logincontainerTitle">

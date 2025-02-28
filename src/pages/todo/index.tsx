@@ -13,10 +13,8 @@ const Todo = () => {
   const { showMenu, setShowMenu } = useContext(MyContext);
 
   useEffect(() => {
-    console.log("showMenu is changing..");
     const handleDocumentClick = () => {
       if (showMenu[0] > -1) {
-        console.log("!!");
         setShowMenu([-1, showMenu[1]]);
       }
     };
@@ -34,7 +32,6 @@ const Todo = () => {
 
   useEffect(() => {
     const testAuth = async () => {
-      console.log("/todo, call getAuth()...");
       await UserAPI.getAuth();
     };
     testAuth();

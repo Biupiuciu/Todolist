@@ -11,10 +11,10 @@ const resendcode: NextApiHandler = async (req, res) => {
 
   cognitoUser.resendConfirmationCode((err, result) => {
     if (err) {
-      console.log("! ", err.message);
+      console.log(err.message);
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
     }
-    console.log(result);
+
     return res.status(HttpStatus.OK).json({ message: result });
   });
 };
