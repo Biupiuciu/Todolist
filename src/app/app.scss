@@ -9,9 +9,8 @@ body {
 
 
 .background {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  // padding: 50px;
   background: #F0F0F0;
   color: #1a1b1d;
   display: flex;
@@ -84,9 +83,20 @@ input:focus {
 }
 .kanban {
   width: 90%;
+  height: 100%;
   margin: auto;
   margin-top: 3%;
 }
+
+.loading{
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: 700px;
+  width: 100%;
+
+}
+
 p {
   width: 100%;
   display: inline-block;

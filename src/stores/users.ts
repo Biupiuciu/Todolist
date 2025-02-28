@@ -21,7 +21,6 @@ export const userStore = create<{
 
 export class UserAPI {
   static async generateAccessToken() {
-    console.log("calling....");
     const response = await fetch("api/refresh-token", {
       method: "POST",
       headers: {
@@ -43,14 +42,11 @@ export class UserAPI {
 
   static async getAuth() {
     try {
-      console.log("call getAuth,");
       const res = await fetch("/api/profile", {
         method: "GET",
       });
       const result = await res.json();
-      console.log("?", result);
       const { id, username } = result;
-      console.log("after run /profile,", id, username);
       const { setUser } = userStore.getState();
       setUser({ id: id, username: username });
       return id;
@@ -72,7 +68,6 @@ export class UserAPI {
       }),
     });
     const result = await res.json();
-    console.log("test:", result);
     if (res.status == HttpStatus.CREATED) {
       toast.success(result.message);
 
@@ -98,10 +93,14 @@ export class UserAPI {
 
     if (res.status == HttpStatus.OK) {
       toast.success(result.message);
-      console.log("after login,", result.username); //debug
       userStore.getState().setUser({ username: email });
+      return false;
     } else {
       toast.error(result.message);
+      if (result.userNotConfirmed) {
+        return true;
+      }
+      return false;
     }
   }
 
@@ -118,11 +117,8 @@ export class UserAPI {
       }),
     });
     const result = await res.json();
-
     if (res.status == HttpStatus.CREATED) {
-      console.log("run???");
       await UserAPI.logIn(email, pwd);
-      //if fail???
     } else {
       //handle db creation fail
       toast.error(result.message);
@@ -141,7 +137,7 @@ export class UserAPI {
     });
     const result = await res.json();
     if (res.status == HttpStatus.OK) {
-      toast.success(result);
+      toast.success("Resend verification code.");
     } else {
       toast.error(result.message);
     }

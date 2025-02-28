@@ -13,11 +13,10 @@ const verifysignup: NextApiHandler = async (req, res) => {
 
   cognitoUser.confirmRegistration(code, false, async (err, result) => {
     if (err) {
-      console.log("! ", err.message);
+      console.log(err.message);
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
     }
 
-    console.log("Verify:", result);
     const dbResult =
       await pool.query(`INSERT INTO users (username,  tasks,taskNum) 
             VALUES ('${email}', '[{"tasks": [ {"id": "0", "content": "Task1"}], "title": "To do"}, {"tasks": [], "title": "In progress"}, {"tasks": [], "title": "Done"}]',1) RETURNING id;;`);
@@ -31,7 +30,7 @@ const verifysignup: NextApiHandler = async (req, res) => {
       // need to handle it later on
     }
 
-    res.status(HttpStatus.CREATED);
+    res.status(HttpStatus.CREATED).json({ message: "Account created." });
   });
 };
 

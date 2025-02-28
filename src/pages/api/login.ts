@@ -33,6 +33,11 @@ const login: NextApiHandler = async (req, res) => {
             resolve(null); // Resolve when successful
           },
           onFailure: (err) => {
+            if (err.code == "UserNotConfirmedException") {
+              res
+                .status(HttpStatus.BAD_REQUEST)
+                .json({ message: err.message, userNotConfirmed: true });
+            }
             res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
             reject(err); // Reject if there is an error
           },

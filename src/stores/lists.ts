@@ -48,7 +48,6 @@ export class ListAPI {
       });
 
       if (status == HttpStatus.OK) {
-        console.log("Update Successfully!");
         return;
       }
 

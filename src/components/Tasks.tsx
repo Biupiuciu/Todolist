@@ -13,6 +13,8 @@ import { ListAPI, Task } from "@/stores/lists";
 import { UserAPI } from "@/stores/users";
 import { userStore } from "@/stores/users";
 import { listStore } from "@/stores/lists";
+import FadeLoader from "react-spinners/FadeLoader";
+import { useState } from "react";
 export type ListType = "todo" | "inpro" | "done";
 
 export const Tasks = () => {
@@ -21,11 +23,12 @@ export const Tasks = () => {
   const lists = listStore((state) => state.lists);
   const { setLists } = listStore.getState();
   const listTypes = ["todo", "inpro", "done"];
-
+  const [loading, setLoading] = useState(true);
   const sensors = useSensors(useSensor(PointerSensor));
   const init = async () => {
     const result = await UserAPI.getAuth();
     await ListAPI.getTasks(result);
+    setLoading(false);
   };
   useEffect(() => {
     init();
@@ -128,19 +131,27 @@ export const Tasks = () => {
         <div className="background">
           <div className="kanban">
             <Header></Header>
-            <div className="tableContainer">
-              {lists.map((list, index) => {
-                const listType = listTypes[index] as ListType;
-                return (
-                  <Droppable
-                    id={list.title}
-                    key={listType}
-                    list={list}
-                    listSequence={index}
-                  ></Droppable>
-                );
-              })}
-            </div>
+            {loading ? (
+              <div className="loading">
+                <FadeLoader />
+              </div>
+            ) : (
+              <>
+                <div className="tableContainer">
+                  {lists.map((list, index) => {
+                    const listType = listTypes[index] as ListType;
+                    return (
+                      <Droppable
+                        id={list.title}
+                        key={listType}
+                        list={list}
+                        listSequence={index}
+                      ></Droppable>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </DndContext>
