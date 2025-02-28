@@ -44,6 +44,9 @@ const login: NextApiHandler = async (req, res) => {
         .json({ message: "Internal Server Error" });
     }
   }
+  if (req.method === "GET") {
+    return res.status(HttpStatus.OK).json({ message: "hello" });
+  }
   return res.status(405).json({ message: "Method Not Allowed!" });
 };
 
