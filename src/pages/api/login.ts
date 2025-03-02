@@ -21,6 +21,7 @@ const login: NextApiHandler = async (req, res) => {
       await new Promise((resolve, reject) => {
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: (session) => {
+            console.log(session);
             const refreshToken = session.getRefreshToken().getToken();
             res.setHeader(
               "Set-Cookie",
