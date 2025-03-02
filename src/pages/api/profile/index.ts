@@ -9,6 +9,9 @@ import {
 
 const handler: NextApiHandler = async (req, res) => {
   const cognitoUser = userPool.getCurrentUser();
+  console.log("cognitoUser", cognitoUser);
+  console.log("userPool", userPool);
+
   if (cognitoUser) {
     cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
       if (err) {
