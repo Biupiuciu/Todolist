@@ -25,7 +25,7 @@ const login: NextApiHandler = async (req, res) => {
             const refreshToken = session.getRefreshToken().getToken();
             res.setHeader(
               "Set-Cookie",
-              `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000; Path=/`
+              `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000; Path=/`
             ); // Set the cookie for 30 days
 
             res

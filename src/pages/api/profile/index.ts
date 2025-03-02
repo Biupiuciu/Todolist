@@ -10,7 +10,6 @@ import {
 const handler: NextApiHandler = async (req, res) => {
   const cognitoUser = userPool.getCurrentUser();
   console.log("cognitoUser", cognitoUser);
-  console.log("userPool", userPool);
 
   if (cognitoUser) {
     cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
@@ -35,7 +34,7 @@ const handler: NextApiHandler = async (req, res) => {
         const refreshToken = newSession.getRefreshToken().getToken();
         res.setHeader(
           "Set-Cookie",
-          `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000`
+          `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
         ); // 30 days
 
         const username = newSession.getIdToken().payload.email;
