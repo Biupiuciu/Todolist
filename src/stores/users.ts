@@ -7,6 +7,9 @@ export interface User {
   username?: string;
 }
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+
 export const userStore = create<{
   user: User;
   setUser: (user: User) => void;
@@ -21,7 +24,7 @@ export const userStore = create<{
 
 export class UserAPI {
   static async generateAccessToken() {
-    const response = await fetch("api/refresh-token", {
+    const response = await fetch(`${API_BASE_URL}/api/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Set the content type to JSON
@@ -42,7 +45,7 @@ export class UserAPI {
 
   static async getAuth() {
     try {
-      const res = await fetch("/api/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/profile`, {
         method: "GET",
       });
       const result = await res.json();
@@ -57,7 +60,7 @@ export class UserAPI {
   }
 
   static async signUp(email: string, pwd: string) {
-    const res = await fetch("/api/signup", {
+    const res = await fetch(`${API_BASE_URL}/api/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Set the content type to JSON
@@ -79,7 +82,7 @@ export class UserAPI {
   }
 
   static async logIn(email: string, psd: string) {
-    const res = await fetch("/api/login", {
+    const res = await fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Set the content type to JSON
@@ -105,7 +108,7 @@ export class UserAPI {
   }
 
   static async verifySignUp(code: string, email: string, pwd: string) {
-    const res = await fetch("/api/verifysignup", {
+    const res = await fetch(`${API_BASE_URL}/api/verifysignup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -126,7 +129,7 @@ export class UserAPI {
   }
 
   static async resendCode(email: string) {
-    const res = await fetch("/api/resendcode", {
+    const res = await fetch(`${API_BASE_URL}/api/resendcode`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -146,6 +149,6 @@ export class UserAPI {
     userStore.getState().logOutUser();
     listStore.getState().resetLists();
 
-    await fetch("/api/logout", { method: "POST" });
+    await fetch(`${API_BASE_URL}/api/logout`, { method: "POST" });
   }
 }

@@ -3,6 +3,7 @@ import { UserAPI } from "./users";
 import { TokenGenerationError } from "@/utils/error";
 import { HttpStatus } from "@/utils/httpStatus";
 type ListTitle = "To do" | "In progress" | "Done";
+
 export interface Task {
   id: number;
   content: string;
@@ -11,6 +12,9 @@ export interface List {
   tasks: Array<Task>;
   title: ListTitle;
 }
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
 const DEFAULT_LIST = [
   { tasks: [], title: "To do" },
@@ -38,7 +42,7 @@ export class ListAPI {
       const token = await UserAPI.generateAccessToken();
       if (!token) throw new TokenGenerationError();
 
-      const { status } = await fetch(`/api/profile/${userId}`, {
+      const { status } = await fetch(`${API_BASE_URL}/api/profile/${userId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,7 +68,7 @@ export class ListAPI {
       const token = await UserAPI.generateAccessToken();
       if (!token) throw new TokenGenerationError();
 
-      const res = await fetch(`/api/profile/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/profile/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
