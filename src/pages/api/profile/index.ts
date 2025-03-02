@@ -48,7 +48,7 @@ const handler: NextApiHandler = async (req, res) => {
       });
     });
   } else {
-    console.log("4");
+    console.log("4", res);
     return res
       .status(HttpStatus.BAD_REQUEST)
       .json({ message: "Internal Error" });
