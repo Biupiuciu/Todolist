@@ -46,6 +46,7 @@ export class UserAPI {
         method: "GET",
       });
       const result = await res.json();
+      console.log("user getAuth: ", result);
       const { id, username } = result;
       const { setUser } = userStore.getState();
       setUser({ id: id, username: username });

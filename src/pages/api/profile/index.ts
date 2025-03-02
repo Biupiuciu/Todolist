@@ -12,6 +12,7 @@ const handler: NextApiHandler = async (req, res) => {
   if (cognitoUser) {
     cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
       if (err) {
+        console.log("1");
         return res
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: err.message });
@@ -22,6 +23,7 @@ const handler: NextApiHandler = async (req, res) => {
       });
       cognitoUser.refreshSession(refreshTokenObj, async (err, newSession) => {
         if (err) {
+          console.log("2");
           return res
             .status(HttpStatus.BAD_REQUEST)
             .json({ message: err.message });
@@ -37,6 +39,7 @@ const handler: NextApiHandler = async (req, res) => {
         const id = await getUserId(username);
 
         if (!id) {
+          console.log("3");
           return res
             .status(HttpStatus.BAD_REQUEST)
             .json({ message: "Internal Error" });
@@ -45,6 +48,7 @@ const handler: NextApiHandler = async (req, res) => {
       });
     });
   } else {
+    console.log("4");
     return res
       .status(HttpStatus.BAD_REQUEST)
       .json({ message: "Internal Error" });
