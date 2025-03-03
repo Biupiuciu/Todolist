@@ -8,7 +8,6 @@ import {
 import { HttpStatus } from "@/utils/httpStatus";
 
 const login: NextApiHandler = async (req, res) => {
-  // if (req.method === "POST") {
   const { email, psd } = req.body;
 
   const authenticationDetails = new AuthenticationDetails({
@@ -34,7 +33,7 @@ const login: NextApiHandler = async (req, res) => {
           res
             .status(HttpStatus.OK)
             .json({ message: "Log in successfully.", username: email });
-          resolve(null); // Resolve when successful
+          resolve(null);
         },
         onFailure: (err) => {
           if (err.code == "UserNotConfirmedException") {
@@ -43,7 +42,7 @@ const login: NextApiHandler = async (req, res) => {
               .json({ message: err.message, userNotConfirmed: true });
           }
           res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
-          reject(err); // Reject if there is an error
+          reject(err);
         },
       });
     });
@@ -52,11 +51,6 @@ const login: NextApiHandler = async (req, res) => {
       .status(HttpStatus.INTERNAL_SERVER_ERROR)
       .json({ message: "Internal Server Error" });
   }
-  // }
-  // if (req.method === "GET") {
-  //   return res.status(HttpStatus.OK).json({ message: "hello" });
-  // }
-  // return res.status(405).json({ message: "Method Not Allowed!" });
 };
 
 export default login;

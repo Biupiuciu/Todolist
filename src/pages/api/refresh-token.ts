@@ -4,8 +4,6 @@ import { CognitoUser, CognitoRefreshToken } from "amazon-cognito-identity-js";
 import { HttpStatus } from "@/utils/httpStatus";
 import "dotenv/config";
 const refreshtoken: NextApiHandler = async (req, res) => {
-  // console.log(req);
-  // if (req.method === "POST") {
   const { email } = req.body;
 
   const refreshToken = req.cookies.refreshToken;
@@ -39,9 +37,6 @@ const refreshtoken: NextApiHandler = async (req, res) => {
       .status(HttpStatus.UNAUTHORIZED)
       .json({ message: "Session expired. Please log in again." });
   }
-  // }
-  // console.log("??");
-  // return res.status(405).json({ message: "Method Not Allowed!" });
 };
 
 export default refreshtoken;

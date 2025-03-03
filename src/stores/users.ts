@@ -43,7 +43,6 @@ export class UserAPI {
   static async getAuth() {
     try {
       const savedUsername = localStorage.getItem("username");
-      console.log(savedUsername);
       if (!savedUsername) throw new Error("No login info");
       const res = await fetch("/api/profile", {
         method: "POST",
@@ -53,7 +52,6 @@ export class UserAPI {
       const result = await res.json();
 
       if (res.status == HttpStatus.OK) {
-        console.log("user getAuth: ", result);
         const { id, username } = result;
         const { setUser } = userStore.getState();
         setUser({ id: id, username: username });
@@ -71,7 +69,7 @@ export class UserAPI {
     const res = await fetch("/api/signup", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
@@ -93,7 +91,7 @@ export class UserAPI {
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
