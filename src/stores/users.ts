@@ -24,7 +24,7 @@ export class UserAPI {
     const response = await fetch("api/refresh-token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: userStore.getState().user.username,
@@ -43,6 +43,7 @@ export class UserAPI {
   static async getAuth() {
     try {
       const savedUsername = localStorage.getItem("username");
+      console.log(savedUsername);
       if (!savedUsername) throw new Error("No login info");
       const res = await fetch("/api/profile", {
         method: "POST",
@@ -154,9 +155,15 @@ export class UserAPI {
     }
   }
   static async logOut() {
+    const username = localStorage.getItem("username");
     userStore.getState().logOutUser();
     listStore.getState().resetLists();
 
-    await fetch("/api/logout", { method: "POST" });
+    await fetch("/api/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username }),
+    });
+    localStorage.removeItem("username");
   }
 }

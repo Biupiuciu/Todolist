@@ -35,6 +35,8 @@ const handler: NextApiHandler = async (req, res) => {
       `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
     ); // 30 days
     const username = newSession.getIdToken().payload.email;
+
+    console.log(username);
     const id = await getUserId(username);
 
     console.log("/profile get:", id);
