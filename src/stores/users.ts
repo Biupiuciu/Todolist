@@ -42,15 +42,24 @@ export class UserAPI {
 
   static async getAuth() {
     try {
+      const savedUsername = localStorage.getItem("username");
+      if (!savedUsername) throw new Error("No login info");
       const res = await fetch("/api/profile", {
-        method: "GET",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ savedUsername: savedUsername }),
       });
       const result = await res.json();
-      console.log("user getAuth: ", result);
-      const { id, username } = result;
-      const { setUser } = userStore.getState();
-      setUser({ id: id, username: username });
-      return id;
+
+      if (res.status == HttpStatus.OK) {
+        console.log("user getAuth: ", result);
+        const { id, username } = result;
+        const { setUser } = userStore.getState();
+        setUser({ id: id, username: username });
+        return id;
+      } else {
+        throw new Error(result.message);
+      }
     } catch (err) {
       console.log(err);
       UserAPI.logOut();
@@ -93,6 +102,7 @@ export class UserAPI {
     const result = await res.json();
 
     if (res.status == HttpStatus.OK) {
+      localStorage.setItem("username", email);
       toast.success(result.message);
       userStore.getState().setUser({ username: email });
       return false;

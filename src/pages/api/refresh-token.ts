@@ -4,7 +4,7 @@ import { CognitoUser, CognitoRefreshToken } from "amazon-cognito-identity-js";
 import { HttpStatus } from "@/utils/httpStatus";
 import "dotenv/config";
 const refreshtoken: NextApiHandler = async (req, res) => {
-  console.log(req);
+  // console.log(req);
   // if (req.method === "POST") {
   const { email } = req.body;
 
