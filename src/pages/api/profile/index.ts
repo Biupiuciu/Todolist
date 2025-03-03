@@ -2,11 +2,7 @@ import type { NextApiHandler } from "next";
 import userPool from "@/lib/cognito";
 import getUserId from "@/lib/repositories/userRepo";
 import { HttpStatus } from "@/utils/httpStatus";
-import {
-  CognitoRefreshToken,
-  CognitoUser,
-  CognitoUserSession,
-} from "amazon-cognito-identity-js";
+import { CognitoRefreshToken, CognitoUser } from "amazon-cognito-identity-js";
 
 const handler: NextApiHandler = async (req, res) => {
   const { savedUsername } = req.body;
