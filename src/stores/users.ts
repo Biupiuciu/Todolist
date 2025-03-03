@@ -24,7 +24,7 @@ export class UserAPI {
     const response = await fetch("api/refresh-token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: userStore.getState().user.username,
@@ -42,14 +42,23 @@ export class UserAPI {
 
   static async getAuth() {
     try {
+      const savedUsername = localStorage.getItem("username");
+      if (!savedUsername) throw new Error("No login info");
       const res = await fetch("/api/profile", {
-        method: "GET",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ savedUsername: savedUsername }),
       });
       const result = await res.json();
-      const { id, username } = result;
-      const { setUser } = userStore.getState();
-      setUser({ id: id, username: username });
-      return id;
+
+      if (res.status == HttpStatus.OK) {
+        const { id, username } = result;
+        const { setUser } = userStore.getState();
+        setUser({ id: id, username: username });
+        return id;
+      } else {
+        throw new Error(result.message);
+      }
     } catch (err) {
       console.log(err);
       UserAPI.logOut();
@@ -60,7 +69,7 @@ export class UserAPI {
     const res = await fetch("/api/signup", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
@@ -82,7 +91,7 @@ export class UserAPI {
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
@@ -92,6 +101,7 @@ export class UserAPI {
     const result = await res.json();
 
     if (res.status == HttpStatus.OK) {
+      localStorage.setItem("username", email);
       toast.success(result.message);
       userStore.getState().setUser({ username: email });
       return false;
@@ -143,9 +153,15 @@ export class UserAPI {
     }
   }
   static async logOut() {
+    const username = localStorage.getItem("username");
     userStore.getState().logOutUser();
     listStore.getState().resetLists();
 
-    await fetch("/api/logout", { method: "POST" });
+    await fetch("/api/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username }),
+    });
+    localStorage.removeItem("username");
   }
 }

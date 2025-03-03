@@ -3,6 +3,7 @@ import { UserAPI } from "./users";
 import { TokenGenerationError } from "@/utils/error";
 import { HttpStatus } from "@/utils/httpStatus";
 type ListTitle = "To do" | "In progress" | "Done";
+
 export interface Task {
   id: number;
   content: string;

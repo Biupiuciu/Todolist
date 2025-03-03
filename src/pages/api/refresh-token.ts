@@ -3,7 +3,7 @@ import userPool from "@/lib/cognito";
 import { CognitoUser, CognitoRefreshToken } from "amazon-cognito-identity-js";
 import { HttpStatus } from "@/utils/httpStatus";
 import "dotenv/config";
-const verifysignup: NextApiHandler = async (req, res) => {
+const refreshtoken: NextApiHandler = async (req, res) => {
   const { email } = req.body;
 
   const refreshToken = req.cookies.refreshToken;
@@ -39,4 +39,4 @@ const verifysignup: NextApiHandler = async (req, res) => {
   }
 };
 
-export default verifysignup;
+export default refreshtoken;
